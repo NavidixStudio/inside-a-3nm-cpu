@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>درون یک پردازنده‌ی ۳ نانومتری | Inside a 3nm CPU — کالبدشکافی سه‌بعدی اولترا ۹، ترانزیستور GAA و فیزیک حرارت | نویدیکس</title>
+<meta name="description" content="آزمایشگاه سه‌بعدی تعاملی درون پردازنده‌ی ۳ نانومتری اولترا ۹ در استودیو نویدیکس: کالبدشکافی چیپلت سه‌بعدی Foveros، فرماندهی هم‌زمان DDR5 RAM و GPU و NVMe، جمع‌کننده‌ی واقعی ۴بیتی صفر و یک، ترانزیستور اتمی ۳nm GAA و دوربین حرارتی زنده FLIR برای درک اینکه چرا CPU داغ می‌شود." />
+<meta name="keywords" content="سی پی یو چطور کار میکند, درون پردازنده ۳ نانومتری, Core Ultra 9, معماری چیپلت Foveros 3D, ترانزیستور ۳ نانومتری, GAA RibbonFET, تونل زنی کوانتومی, گیت منطقی XOR AND OR, جمع کننده باینری, خط لوله پردازنده CPU Pipeline, چرا سی پی یو داغ میشود, معادله توان CMOS, Thermal Throttling, دوربین حرارتی FLIR, آزمایشگاه علمی تعاملی, استودیو نویدیکس" />
+<meta name="author" content="محمد نویدی" />
+<link rel="canonical" href="https://navidixstudio.com/explore/inside-a-cpu/" />
+<link rel="alternate" type="text/markdown" href="https://navidixstudio.com/llms.txt" title="Navidix AI &amp; LLM Context Guide" />
+<link rel="alternate" type="text/markdown" href="https://navidixstudio.com/llms-full.txt" title="Navidix AI &amp; LLM Full Knowledge Graph" />
+<meta name="theme-color" content="#040507" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:site_name" content="Navidix" />
+<meta property="og:type" content="article" />
+<meta property="og:locale" content="fa_IR" />
+<meta property="og:title" content="درون یک پردازنده‌ی ۳ نانومتری — کالبدشکافی سه‌بعدی اولترا ۹، ترانزیستور GAA و فیزیک حرارت | نویدیکس" />
+<meta property="og:description" content="بزرگ‌نمایی ۱۵ میلیون برابری از پکیج ۴۵ میلی‌متری اولترا ۹ تا کانال ۱۵ اتمی ترانزیستور ۳ نانومتری: چطور میلیاردها صفر و یک کل سیستم را مدیریت می‌کنند و چرا پردازنده داغ می‌شود؟" />
+<meta property="og:url" content="https://navidixstudio.com/explore/inside-a-cpu/" />
+<meta property="og:image" content="https://navidixstudio.com/og-home.png" />
+<meta property="og:image:secure_url" content="https://navidixstudio.com/og-home.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="درون یک پردازنده‌ی ۳ نانومتری — آزمایشگاه سه‌بعدی سخت‌افزار استودیو نویدیکس" />
+<meta property="article:published_time" content="2026-11-21T10:00:00+03:30" />
+<meta property="article:modified_time" content="2026-11-21T10:00:00+03:30" />
+<meta property="article:author" content="محمد نویدی" />
+<meta property="article:section" content="پلتفرم علمی تعاملی" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="درون یک پردازنده‌ی ۳ نانومتری — آزمایشگاه سه‌بعدی اولترا ۹ | نویدیکس" />
+<meta name="twitter:description" content="کلاهک فلزی پردازنده‌ی اولترا ۹ را بردار، از مقیاس چیپلت و گذرگاه‌های DDR5/PCIe تا ترانزیستور اتمی ۳nm GAA و دوربین حرارتی زنده FLIR سفر کن." />
+<meta name="twitter:image" content="https://navidixstudio.com/og-home.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="/navidix-icon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<style>
+@font-face{font-family:'Navidix Serif';src:url('./assets/fonts/source-serif-4-latin.woff2')format('woff2');font-weight:200 900;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-200B,U+2010-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Navidix Serif';src:url('./assets/fonts/source-serif-4-latin-italic.woff2')format('woff2');font-weight:200 900;font-style:italic;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-200B,U+2010-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Navidix Serif';src:url('./assets/fonts/source-serif-4-digits.woff2?v=3')format('woff2');font-weight:200 900;font-style:normal;font-display:swap;unicode-range:U+0660-0669,U+066B-066C,U+06F0-06F9}
+@font-face{font-family:'Estedad';src:url('./assets/fonts/estedad-var.woff2?v=3')format('woff2');font-weight:100 900;font-display:swap;font-style:normal;unicode-range:U+0600-065F,U+066A,U+066D-06EF,U+06FA-06FF,U+0750-077F,U+0870-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:'Estedad';src:url('./assets/fonts/source-serif-4-digits.woff2?v=3')format('woff2');font-weight:100 900;font-display:swap;font-style:normal;unicode-range:U+0660-0669,U+066B-066C,U+06F0-06F9}
+@font-face{font-family:'Sora';src:url('./assets/fonts/sora-var.woff2')format('woff2');font-weight:100 800;font-display:swap;font-style:normal}
+@font-face{font-family:'Inter';src:url('./assets/fonts/inter-var.woff2')format('woff2');font-weight:100 900;font-display:swap;font-style:normal}
+</style>
+<link rel="stylesheet" href="./nvx-explore.css" />
+<link rel="stylesheet" href="./cpu-lab.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+  {
+    "@type": "TechArticle",
+    "@id": "https://navidixstudio.com/explore/inside-a-cpu/#article",
+    "headline": "درون یک پردازنده‌ی ۳ نانومتری: چطور میلیاردها صفر و یک کل سیستم را مدیریت می‌کنند و چرا CPU داغ می‌شود؟",
+    "alternativeHeadline": "Inside a 3nm CPU — Interactive 3D Multi-Scale Ultra 9 Architecture, GAA Transistor & FLIR Thermal Lab",
+    "description": "کالبدشکافی سه‌بعدی و مهندسی یک پردازنده‌ی ۳ نانومتری رده‌بالا (کلاس اولترا ۹) در پنج مقیاس فیزیکی: معماری چیپلت سه‌بعدی Foveros، فرماندهی سیستم و خط لوله‌ی ۵ مرحله‌ای، جمع‌کننده‌ی واقعی ۴بیتی، ترانزیستور اتمی ۳nm GAA / RibbonFET با تونل‌زنی کوانتومی، و شبیه‌ساز حرارتی زنده PDE با قانون P = α·C·V²·f.",
+    "inLanguage": "fa-IR",
+    "datePublished": "2026-11-21T10:00:00+03:30",
+    "dateModified": "2026-11-21T10:00:00+03:30",
+    "author": {"@type": "Person", "name": "محمد نویدی", "url": "https://navidixstudio.com/about.html"},
+    "publisher": {"@type": "Organization", "name": "استودیو نویدیکس (Navidix Studio)", "url": "https://navidixstudio.com/", "logo": {"@type": "ImageObject", "url": "https://navidixstudio.com/navidix-icon-512.png"}},
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://navidixstudio.com/explore/inside-a-cpu/"},
+    "image": "https://navidixstudio.com/og-home.png",
+    "keywords": ["سی پی یو چطور کار می‌کند", "پردازنده‌ی ۳ نانومتری", "اولترا ۹", "معماری چیپلت Foveros 3D", "ترانزیستور GAA RibbonFET", "تونل‌زنی کوانتومی", "گیت منطقی", "چرا CPU داغ می‌شود", "Thermal Throttling", "معادله توان CMOS"],
+    "about": [
+      {"@type": "Thing", "name": "Central processing unit"},
+      {"@type": "Thing", "name": "3 nm process"},
+      {"@type": "Thing", "name": "Gate-all-around FET"},
+      {"@type": "Thing", "name": "Instruction pipelining"},
+      {"@type": "Thing", "name": "Thermal design power"}
+    ]
+  },
+  {
+    "@type": "LearningResource",
+    "@id": "https://navidixstudio.com/explore/inside-a-cpu/#lab",
+    "name": "آزمایشگاه سه‌بعدی درون یک پردازنده‌ی ۳ نانومتری",
+    "alternateName": "Inside a 3nm CPU — Multi-Scale 3D Hardware Observatory",
+    "url": "https://navidixstudio.com/explore/inside-a-cpu/",
+    "inLanguage": "fa-IR",
+    "isAccessibleForFree": true,
+    "interactivityType": "active",
+    "learningResourceType": "Interactive 3D Hardware & Semiconductor Physics Simulation",
+    "educationalUse": "Interactive exploration of CPU chiplet architecture, instruction pipelines, Boolean logic adders, 3nm GAA transistors, and CMOS thermodynamics",
+    "creator": {"@type": "Person", "name": "محمد نویدی"}
+  },
+  {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "صفحه‌ی اصلی", "item": "https://navidixstudio.com/"},
+      {"@type": "ListItem", "position": 2, "name": "پلتفرم علمی تعاملی", "item": "https://navidixstudio.com/explore/"},
+      {"@type": "ListItem", "position": 3, "name": "درون یک پردازنده‌ی ۳ نانومتری", "item": "https://navidixstudio.com/explore/inside-a-cpu/"}
+    ]
+  },
+  {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "پردازنده‌ی ۳ نانومتری کلاس اولترا ۹ واقعاً چه چیزی درون خودش دارد؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "برخلاف پردازنده‌های قدیمی که یک تکه سیلیکون یکپارچه بودند، پردازنده‌های مدرن کلاس اولترا ۹ با معماری چیپلت سه‌بعدی (مانند Foveros 3D) ساخته می‌شوند. زیر کلاهک فلزی IHS چهار تایل مجزای سیلیکونی قرار دارد: تایل محاسباتی ۳ نانومتری شامل هسته‌های پرقدرت P-Core، هسته‌های کم‌مصرف E-Core و کش مشترک L3؛ تایل گرافیک مجتمع Xe؛ تایل SoC شامل کنترلر DDR5 و موتور هوش مصنوعی NPU؛ و تایل I/O برای خطوط پرسرعت PCIe 5.0 و Thunderbolt که همگی روی یک پایه‌ی سیلیکونی مشترک با هزاران اتصال عمودی مسی (TSV) به هم وصل‌اند."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "CPU چطور تنها با صفر و یک کل سیستم (RAM، کارت گرافیک، SSD و نمایشگر) را مدیریت می‌کند؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "درون پردازنده تمام دستورها، داده‌ها و آدرس‌های سخت‌افزاری به شکل رشته‌های باینری (سطوح ولتاژ ۰ و ۰٫۸۵ ولت) هستند. هر هسته در هر ثانیه تا ۵٫۷ میلیارد بار چرخه‌ی خط لوله‌ی پنج‌مرحله‌ای Fetch، Decode، Execute، Memory و Writeback را اجرا می‌کند و از طریق گذرگاه‌های مسی اختصاصی (کنترلر DDR5 و خطوط PCIe 5.0) فرمان‌های خواندن حافظه، رندر گرافیکی و وقفه‌های سخت‌افزاری را در مقیاس نانوثانیه زمان‌بندی می‌کند."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "آیا «۳ نانومتر» واقعاً به معنای اندازه‌ی فیزیکی خود ترانزیستور است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "خیر؛ «۳ نانومتر» امروز یک نام تجاری برای نسل فناوری لیتوگرافی (Process Node) است و نه طول دقیق هر ترانزیستور. با این حال ابعاد بحرانی درون ترانزیستور — به‌ویژه ضخامت نوارهای سیلیکونی نانو‌شیت (حدود ۵ تا ۶ نانومتر) و لایه‌ی عایق گیت HfO2 (حدود ۱ تا ۲ نانومتر) — واقعاً در مقیاس چند ده اتم سیلیکون قرار دارند؛ جایی که اثرات مکانیک کوانتومی مثل تونل‌زنی الکترون‌ها به چالش اصلی مهندسی تبدیل می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "تفاوت ترانزیستور جدید GAA (RibbonFET) با FinFET قدیمی چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "در ترانزیستورهای FinFET قدیمی، گیت فلزی فقط از سه طرف روی یک تیغه‌ی عمودی سیلیکون می‌نشست و در ابعاد زیر ۵ نانومتر دیگر نمی‌توانست جریان نشتی را مهار کند. در معماری Gate-All-Around (GAA یا RibbonFET)، کانال از چند نوار افقی فوق‌العاده نازک سیلیکون (نانوشیت) روی هم ساخته می‌شود و گیت فلزی از هر ۴ طرف آن‌ها را در آغوش می‌گیرد؛ این کنترل الکتروستاتیکی ۳۶۰ درجه نشت جریان را کم و راندمان ولتاژ پایین را بسیار بهتر می‌کند."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "چرا CPU هنگام کار سنگین داغ می‌شود؟ ریشه‌ی فیزیکی حرارت پردازنده چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "حرارت پردازنده نتیجه‌ی مستقیم دو پدیده‌ی فیزیکی است: اول توان دینامیکی (P = α·C·V²·f) که هنگام شارژ و دشارژ میلیاردها خازن میکروسکوپی گیت در هر سیکل کلاک، انرژی الکتریکی را از طریق برخورد الکترون‌ها به اتم‌های شبکه‌ی کریستالی سیلیکون (تولید فونون و گرمایش ژول) به گرما تبدیل می‌کند؛ و دوم توان استاتیک ناشی از تونل‌زنی کوانتومی و جریان نشتی زیرآستانه که حتی در حالت خاموش وجود دارد و با بالا رفتن دمای تراشه به‌صورت نمایی تشدید می‌شود."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "چرا افزایش جزئی ولتاژ پردازنده (اورکلاک) باعث جهش ناگهانی دما و مصرف برق می‌شود؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "در معادله‌ی توان دینامیکی CMOS یعنی P = α·C·V²·f، فرکانس (f) به توان ۱ اما ولتاژ (V) به توان ۲ ضرب می‌شود. یعنی اگر ولتاژ را فقط ۲۰ درصد بالا ببری، توان حرارتی حدود ۴۴ درصد بیشتر می‌شود؛ و اگر هم‌زمان فرکانس را هم زیاد کنی، هر دو اثر در هم ضرب شده و دمای هسته به‌سرعت به مرز بحرانی ۱۰۰ درجه‌ی سانتی‌گراد می‌رسد."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Thermal Throttling یا PROCHOT در ۱۰۰ درجه‌ی سانتی‌گراد چیست؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "وقتی دمای نقطه‌ی داغ سیلیکون (Junction Temperature) به آستانه‌ی ایمنی حدود ۱۰۰ درجه‌ی سانتی‌گراد نزدیک می‌شود، حسگرهای حرارتی داخلی پردازنده سیگنال سخت‌افزاری PROCHOT را فعال می‌کنند. واحد مدیریت توان (PMU) در کسری از میلی‌ثانیه ولتاژ و فرکانس کلاک را کاهش می‌دهد تا توان حرارتی افت کند و سیلیکون از آسیب دائمی یا ناپایداری الکتریکی در امان بماند."
+        }
+      }
+    ]
+  }
+]}</script>
+</head>
+<body>
+
+<header class="xbar"><div class="xbar__row">
+  <a class="xbar__home" href="https://navidixstudio.com/"><img src="./assets/navidix-wordmark.webp" alt="NAVIDIX" width="104" height="16" /></a>
+  <a href="https://navidixstudio.com/explore/">پلتفرم علمی تعاملی ←</a>
+</div></header>
+
+<nav class="crumb" aria-label="مسیر صفحه">
+  <ol>
+    <li><a href="https://navidixstudio.com/">نویدیکس</a></li>
+    <li><a href="https://navidixstudio.com/explore/">پلتفرم علمی تعاملی</a></li>
+    <li><span aria-current="page">درون یک پردازنده‌ی ۳ نانومتری</span></li>
+  </ol>
+</nav>
+
+<main>
+
+<section class="xhero">
+  <div class="xhero__field" aria-hidden="true"></div>
+  <div class="xwrap xhero__in">
+    <div class="cpu-hero-meta xin">
+      <span class="cpu-tag cpu-tag--red">تجربه‌ی ۰۷ · آزمایشگاه مهندسی سخت‌افزار</span>
+      <span class="cpu-tag">معماری ۳ نانومتری اولترا ۹ · Foveros 3D</span>
+      <span class="cpu-tag cpu-tag--mono">45mm → 3nm · 15,000,000× ZOOM · FLIR PDE</span>
+    </div>
+    <h1 class="xin xin--2">درون یک پردازنده‌ی ۳ نانومتری<span class="xhero__en">Inside a 3nm CPU — From Silicon Package to Quantum Gate</span></h1>
+    <p class="xhero__lede xin xin--3">زیر یک مربع فلزیِ بی‌صدا به اندازه‌ی کف دست، <b>حدود ۱۸ میلیارد کلیدِ اتمی</b> ۵٫۷ میلیارد بار در ثانیه باز و بسته می‌شوند. کلاهک تیتانیومیِ پردازنده‌ی رده‌بالای <b>اولترا ۹</b> را بردار، از مقیاس چیپلت‌های سه‌بعدی و گذرگاه‌های DDR5 و PCIe 5.0 تا مدار واقعی صفر و یک، کانال ۱۵ اتمی ترانزیستور <b>3nm GAA</b> و دوربین حرارتی زنده <b>FLIR</b> شیرجه بزن — تا یک‌بار برای همیشه ببینی یک تکه شنِ خالص چطور کل کامپیوتر را فرماندهی می‌کند و <b>چرا داغ می‌شود.</b></p>
+    <hr class="xrule xin xin--3" />
+    <div class="cpu-hero-actions xin xin--3">
+      <a class="xbtn xbtn--go" href="#stage">
+        <span>باز کردن آزمایشگاه سه‌بعدی</span>
+        <svg class="xbtn__ind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14M12 6l6 6-6 6"/></svg>
+      </a>
+      <a class="xbtn" href="#science">
+        <span>تحلیل مهندسی و معادلات حرارتی</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="xwrap xp" id="stage" aria-label="آزمایشگاه سه‌بعدی درون یک پردازنده‌ی ۳ نانومتری">
+  <p class="xp__q">چطور فقط <b>صفر و یکِ الکتریکی</b> هم‌زمان بازی 4K، هوش مصنوعی، RAM و نمایشگر را بدون کوچک‌ترین تداخلی هماهنگ می‌کند — و چرا با کمی بالا بردن ولتاژ، دمای تراشه منفجر می‌شود؟ <b>روی لایه‌های سیلیکون زوم کن و خودت آزمایش کن.</b></p>
+
+  <div class="cpx-fs">
+
+    <!-- 1. Five True Physical Scales Rail (45 mm -> 3 nm -> FLIR °C) -->
+    <nav class="cpx-rail" aria-label="پنج مقیاس فیزیکی پردازنده">
+      <button type="button" class="cpx-step" data-cpu-ch="package" aria-current="true">
+        <span class="cpx-step__top"><span class="cpx-step__no">۰۱</span><span class="cpx-step__scale">45 mm</span></span>
+        <span class="cpx-step__title">کالبدشکافی اولترا ۹</span>
+      </button>
+      <button type="button" class="cpx-step" data-cpu-ch="system" aria-current="false">
+        <span class="cpx-step__top"><span class="cpx-step__no">۰۲</span><span class="cpx-step__scale">2 mm</span></span>
+        <span class="cpx-step__title">فرماندهی کل سیستم</span>
+      </button>
+      <button type="button" class="cpx-step" data-cpu-ch="logic" aria-current="false">
+        <span class="cpx-step__top"><span class="cpx-step__no">۰۳</span><span class="cpx-step__scale">100 nm</span></span>
+        <span class="cpx-step__title">منطق صفر و یک (ALU)</span>
+      </button>
+      <button type="button" class="cpx-step" data-cpu-ch="transistor" aria-current="false">
+        <span class="cpx-step__top"><span class="cpx-step__no">۰۴</span><span class="cpx-step__scale">3 nm</span></span>
+        <span class="cpx-step__title">ترانزیستور اتمی GAA</span>
+      </button>
+      <button type="button" class="cpx-step" data-cpu-ch="thermal" aria-current="false">
+        <span class="cpx-step__top"><span class="cpx-step__no">۰۵</span><span class="cpx-step__scale">FLIR °C</span></span>
+        <span class="cpx-step__title">چرا CPU داغ می‌شود؟</span>
+      </button>
+    </nav>
+
+    <!-- 2. The 3D Photorealistic Hardware Observatory -->
+    <div class="cpx-stage">
+      <canvas class="cpx-canvas" role="img" aria-label="شبیه‌ساز تعاملی سه‌بعدی پردازنده‌ی ۳ نانومتری اولترا ۹ در پنج مقیاس فیزیکی: چیپلت سه‌بعدی، گذرگاه سیستم، جمع‌کننده‌ی ۴بیتی، ترانزیستور GAA و دوربین حرارتی FLIR"></canvas>
+
+      <!-- Floating Top Telemetry + Hardware Stage Controls -->
+      <div class="cpx-hud-top">
+        <div class="cpx-hud-metrics" data-cpu-metrics aria-live="polite"></div>
+        <div class="cpx-stage-tools">
+          <button type="button" class="cpx-tool cpx-tool--dock" data-cpu-dock aria-pressed="false" title="مخفی یا نمایش پنل مهندسی در تمام‌صفحه">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14h18"/></svg>
+            <span>مخفی‌کردن پنل</span>
+          </button>
+          <button type="button" class="cpx-tool" data-cpu-orbit aria-pressed="true" title="چرخش خودکار دوربین">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            <span>چرخش</span>
+          </button>
+          <button type="button" class="cpx-tool cpx-tool--fs" data-cpu-fs aria-pressed="false" title="حالت تمام‌صفحه (کلید F)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/></svg>
+            <span>تمام‌صفحه</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Projected Crisp Engineering Callouts -->
+      <div class="cpx-labels" aria-hidden="true"></div>
+
+      <!-- Authentic Ironbow FLIR Legend (Chapter 05 Only) -->
+      <div class="cpx-flir-bar" data-cpu-flir-bar hidden aria-label="مقیاس دمای دوربین حرارتی FLIR">
+        <span>28°C</span>
+        <span class="cpx-flir-grad" aria-hidden="true"></span>
+        <span>104°C</span>
+      </div>
+
+      <!-- Click-to-Inspect Silicon Chiplet HUD -->
+      <aside class="cpx-inspector" data-cpu-inspector hidden aria-label="مشخصات فنی تایل سیلیکونی"></aside>
+
+      <p class="cpx-hint">بکش برای چرخش سه‌بعدی · اسکرول برای بزرگ‌نمایی · کلیک روی هر تایل سیلیکونی · کلید F برای تمام‌صفحه</p>
+      <div class="xstage__note" hidden></div>
+    </div>
+
+    <!-- 3. Engineering Cockpit Deck -->
+    <div class="cpx-deck">
+      <div class="cpx-story" data-cpu-story aria-live="polite"></div>
+
+      <!-- PANEL 01: 45mm Package & Foveros 3D Chiplets -->
+      <div class="cpx-panel" data-cpu-panel="package">
+        <div class="cpx-panel__head">
+          <h3 class="cpx-panel__title">باز کردن لایه‌های پکیج سه‌بعدی <span class="cpx-panel__code">LGA-1851 · Foveros 3D</span></h3>
+          <button type="button" class="cpx-pill" data-cpu-xray aria-pressed="false">نمای اشعه‌ی ایکس کلاهک (X-Ray IHS)</button>
+        </div>
+        <div class="cpx-sliders">
+          <div class="cpx-sl-card">
+            <div class="cpx-sl-top">
+              <label class="cpx-sl-label" for="cpu-sl-explode">جداسازی عمودی لایه‌ها (Delid / Explode)</label>
+              <span class="cpx-sl-val" data-cpu-val="explode">65%</span>
+            </div>
+            <input id="cpu-sl-explode" type="range" min="0" max="1" step="0.01" value="0.65" data-cpu-sl="explode" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 02: System Orchestration & 5-Stage Pipeline -->
+      <div class="cpx-panel" data-cpu-panel="system" hidden>
+        <div class="cpx-panel__head">
+          <h3 class="cpx-panel__title">فرماندهی کل سیستم و خط لوله‌ی ۵ مرحله‌ای <span class="cpx-panel__code">5-Stage Superscalar Pipeline</span></h3>
+          <div class="cpx-bar__group">
+            <button type="button" class="cpx-pill" data-cpu-stepclk title="اجرای یک پالس کلاک به صورت دستی (کلید S)">+۱ پالس کلاک (Step)</button>
+            <button type="button" class="cpx-pill" data-cpu-autoclk aria-pressed="true">کلاک خودکار</button>
+          </div>
+        </div>
+        <div class="cpx-pills" role="group" aria-label="انتخاب سناریوی سیستم">
+          <button type="button" class="cpx-pill" data-cpu-prog="game" aria-pressed="true">رندر فریم بازی 4K</button>
+          <button type="button" class="cpx-pill" data-cpu-prog="ai" aria-pressed="false">استنتاج هوش مصنوعی (ماتریس)</button>
+          <button type="button" class="cpx-pill" data-cpu-prog="browser" aria-pressed="false">باز کردن تب مرورگر و وب</button>
+        </div>
+        <div class="cpx-pipe-stages" aria-label="پنج مرحله خط لوله دستورالعمل">
+          <div class="cpx-pstage is-now" data-cpu-pstage><small>01 · FETCH</small><b>واکشی از حافظه</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>02 · DECODE</small><b>رمزگشایی باینری</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>03 · EXECUTE</small><b>محاسبه در ALU</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>04 · MEMORY</small><b>تراکنش RAM / PCIe</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>05 · WRITEBACK</small><b>ثبت در رجیستر</b></div>
+        </div>
+        <div class="cpx-bus-strip">
+          <span class="cpx-asm" data-cpu-asm>LD  R1, [DDR5:0x8F40]   ·   RAM → L3 (68 ns)</span>
+          <span class="cpx-bin" data-cpu-bin>10001011 00001101 10001111</span>
+        </div>
+        <p style="margin:0;font-size:12.4px;color:rgba(237,242,250,0.72)" data-cpu-opdesc>بارگذاری مختصات سه‌بعدی صحنه از حافظه‌ی DDR5 به کش پردازنده</p>
+      </div>
+
+      <!-- PANEL 03: Real Interactive 4-Bit Boolean Ripple-Carry Adder -->
+      <div class="cpx-panel" data-cpu-panel="logic" hidden>
+        <div class="cpx-panel__head">
+          <h3 class="cpx-panel__title">جمع‌کننده‌ی سخت‌افزاری ۴بیتی روی سیلیکون <span class="cpx-panel__code">4-Bit Ripple-Carry Full Adder</span></h3>
+        </div>
+        <div class="cpx-bin-grid">
+          <div class="cpx-dip-group">
+            <div class="cpx-dip-head"><span>ورودی A (کلیک برای تغییر بیت)</span><b data-cpu-dec-a>5 (0101)</b></div>
+            <div class="cpx-dip-row">
+              <button type="button" class="cpx-bit" data-cpu-bit="A:3" aria-pressed="false"><span>0</span><small>8</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="A:2" aria-pressed="true"><span>1</span><small>4</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="A:1" aria-pressed="false"><span>0</span><small>2</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="A:0" aria-pressed="true"><span>1</span><small>1</small></button>
+            </div>
+          </div>
+          <div class="cpx-dip-group">
+            <div class="cpx-dip-head"><span>ورودی B (کلیک برای تغییر بیت)</span><b data-cpu-dec-b>3 (0011)</b></div>
+            <div class="cpx-dip-row">
+              <button type="button" class="cpx-bit" data-cpu-bit="B:3" aria-pressed="false"><span>0</span><small>8</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="B:2" aria-pressed="false"><span>0</span><small>4</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="B:1" aria-pressed="true"><span>1</span><small>2</small></button>
+              <button type="button" class="cpx-bit" data-cpu-bit="B:0" aria-pressed="true"><span>1</span><small>1</small></button>
+            </div>
+          </div>
+          <div class="cpx-sum-box">
+            <small>حاصل جمع دقیق روی سیم‌های مسی</small>
+            <div class="cpx-sum-dec" data-cpu-sum-dec>5 + 3 = 8</div>
+            <div class="cpx-sum-bits" data-cpu-sum-bits>01000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 04: 3nm GAA / RibbonFET Nanosheet Transistor -->
+      <div class="cpx-panel" data-cpu-panel="transistor" hidden>
+        <div class="cpx-panel__head">
+          <h3 class="cpx-panel__title">کنترل گیت ۴طرفه‌ی ترانزیستور ۳ نانومتری <span class="cpx-panel__code">GAA RibbonFET · V_th = 0.32 V</span></h3>
+        </div>
+        <div class="cpx-pills" role="group" aria-label="پیش‌تنظیم ولتاژ گیت">
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.10">خاموش ۰٫۱۰V (نشت کوانتومی)</button>
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.32">آستانه‌ی روشن‌شدن ۰٫۳۲V</button>
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.85">روشن کامل ۰٫۸۵V (منطقی ۱)</button>
+        </div>
+        <div class="cpx-sliders">
+          <div class="cpx-sl-card">
+            <div class="cpx-sl-top">
+              <label class="cpx-sl-label" for="cpu-sl-gate">ولتاژ گیت فلزی (V_GS)</label>
+              <span class="cpx-sl-val" data-cpu-val="gate">0.72 V</span>
+            </div>
+            <input id="cpu-sl-gate" type="range" min="0" max="1" step="0.01" value="0.72" data-cpu-sl="gate" />
+          </div>
+        </div>
+        <div class="cpx-readout-strip">
+          <div class="cpx-meter"><span>وضعیت منطقی کلید</span><b data-cpu-mos-state>ON — منطقی 1</b></div>
+          <div class="cpx-meter"><span>جریان کانال (I_DS)</span><b data-cpu-mos-cur>101 µA</b></div>
+          <div class="cpx-meter"><span>نشت زیرآستانه</span><b data-cpu-mos-leak>38.4 nA (تونل‌زنی کوانتومی)</b></div>
+          <div class="cpx-meter"><span>لرزش کریستال (فونون)</span><b data-cpu-mos-ph>بالا (تولید حرارت ژول)</b></div>
+        </div>
+      </div>
+
+      <!-- PANEL 05: Live 2D PDE Thermodynamics & FLIR Heat Map -->
+      <div class="cpx-panel" data-cpu-panel="thermal" hidden>
+        <div class="cpx-panel__head">
+          <h3 class="cpx-panel__title">شبیه‌ساز زنده‌ی معادله‌ی گرما و دوربین FLIR <span class="cpx-panel__code">P = α·C·V²·f + I_leak(T)·V</span></h3>
+        </div>
+        <div class="cpx-pills" role="group" aria-label="بار کاری و نوع خنک‌کننده">
+          <button type="button" class="cpx-pill" data-cpu-wl="idle" aria-pressed="false">بیکاری (Idle)</button>
+          <button type="button" class="cpx-pill" data-cpu-wl="gaming" aria-pressed="false">بازی 4K (Gaming)</button>
+          <button type="button" class="cpx-pill" data-cpu-wl="render" aria-pressed="true">رندر سنگین ۲۴ هسته</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="aio360" aria-pressed="true">خنک‌کننده‌ی مایع 360mm</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="air" aria-pressed="false">خنک‌کننده‌ی بادی</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="none" aria-pressed="false">بدون خنک‌کننده (تست بحرانی)</button>
+        </div>
+        <div class="cpx-sliders">
+          <div class="cpx-sl-card">
+            <div class="cpx-sl-top">
+              <label class="cpx-sl-label" for="cpu-sl-freq">فرکانس کلاک (f · توان ۱)</label>
+              <span class="cpx-sl-val" data-cpu-val="freq">5.20 GHz</span>
+            </div>
+            <input id="cpu-sl-freq" type="range" min="1.5" max="6.0" step="0.1" value="5.2" data-cpu-sl="freq" />
+          </div>
+          <div class="cpx-sl-card">
+            <div class="cpx-sl-top">
+              <label class="cpx-sl-label" for="cpu-sl-volt">ولتاژ هسته (V · ضربدر مربع V²!)</label>
+              <span class="cpx-sl-val" data-cpu-val="volt">1.18 V</span>
+            </div>
+            <input id="cpu-sl-volt" type="range" min="0.65" max="1.45" step="0.01" value="1.18" data-cpu-sl="volt" />
+          </div>
+        </div>
+        <div class="cpx-readout-strip">
+          <div class="cpx-meter"><span>توان دینامیکی (αCV²f)</span><b data-cpu-pdyn>165.1 W</b></div>
+          <div class="cpx-meter"><span>توان نشت کوانتومی</span><b data-cpu-pleak>20.2 W</b></div>
+          <div class="cpx-meter"><span>کل حرارت تولیدی (TDP)</span><b data-cpu-ptot>185.3 W</b></div>
+          <div class="cpx-meter"><span>دمای داغ‌ترین هسته (Tj)</span><b data-cpu-tj>74.0 °C</b></div>
+        </div>
+      </div>
+
+      <!-- Bottom Quick Action Strip -->
+      <div class="cpx-bar">
+        <div class="cpx-bar__group">
+          <button type="button" class="xbtn xbtn--go" data-cpu-play aria-pressed="true"><span>توقف</span></button>
+          <button type="button" class="xbtn" data-cpu-reset>بازنشانی همه مقیاس‌ها</button>
+        </div>
+        <div class="cpx-bar__group">
+          <button type="button" class="xbtn" data-cpu-fs aria-pressed="false"><span>حالت تمام‌صفحه</span></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="xwrap xdoc" id="science" aria-label="تحلیل مهندسی و علمی درون پردازنده‌ی ۳ نانومتری">
+
+  <header class="xdoc__head">
+    <p class="xdoc__eyebrow">ENGINEERING DEEP DIVE · تحلیل مهندسی و فیزیک نیمه‌هادی</p>
+    <h2 class="xdoc__title">کالبدشکافی کامل: از بسته‌بندی ۳ بعدی تا تونل‌زنی کوانتومی و حرارت</h2>
+    <p class="xdoc__sub">همه‌ی آنچه زیر کلاهک فلزی یک پردازنده‌ی رده‌بالای ۳ نانومتری می‌گذرد — بدون ساده‌سازی‌های اغراق‌آمیز، با معادلات واقعی و آزمایش‌های عملی که همین الان در صحنه‌ی سه‌بعدی بالا می‌توانی امتحان کنی.</p>
+
+    <div class="xdoc__kpis" aria-label="مشخصات مرجع معماری کلاس اولترا ۹">
+      <div class="xdoc__kpi">
+        <small>فناوری ساخت تایل محاسباتی</small>
+        <b>3 nm GAA</b>
+        <span>ترانزیستور نانوشیت چهارطرفه (<span class="xdoc__en">RibbonFET</span>)</span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>معماری ناهمگن هسته‌ها</small>
+        <b>24 Cores</b>
+        <span>۸ هسته‌ی پرقدرت <span class="xdoc__en">P-Core</span> + ۱۶ هسته‌ی <span class="xdoc__en">E-Core</span></span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>تراکم کلیدهای سیلیکونی</small>
+        <b>~18 Billion</b>
+        <span>روی ۴ تایل مجزا در بسته‌بندی <span class="xdoc__en">Foveros 3D</span></span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>مدت هر تپش کلاک در 5.70 GHz</small>
+        <b>0.175 ns</b>
+        <span>نور در این زمان فقط ۵٫۲ سانتی‌متر حرکت می‌کند</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="xdoc__layout">
+
+    <aside class="xdoc__aside" aria-label="فهرست بخش‌های تحلیل مهندسی">
+      <div class="xdoc__aside-head">فهرست بخش‌ها <span>TOC</span></div>
+      <ul class="xdoc__toc" data-xdoc-toc>
+        <li><a href="#cpu-sec-1" class="is-active"><i>۰۱</i><span>معماری چیپلت سه‌بعدی</span></a></li>
+        <li><a href="#cpu-sec-2"><i>۰۲</i><span>فرماندهی کل سیستم</span></a></li>
+        <li><a href="#cpu-sec-3"><i>۰۳</i><span>منطق صفر و یک (ALU)</span></a></li>
+        <li><a href="#cpu-sec-4"><i>۰۴</i><span>ترانزیستور ۳nm و کوانتوم</span></a></li>
+        <li><a href="#cpu-sec-5"><i>۰۵</i><span>فیزیک گرما و معادله CMOS</span></a></li>
+        <li><a href="#cpu-sec-6"><i>۰۶</i><span>صداقت علمی شبیه‌ساز</span></a></li>
+        <li><a href="#cpu-sec-7"><i>۰۷</i><span>۵ آزمایش پیشنهادی</span></a></li>
+        <li><a href="#cpu-sec-faq"><i>۰۸</i><span>پرسش‌های پرتکرار و منابع</span></a></li>
+      </ul>
+      <a class="xdoc__back" href="#stage">↑ بازگشت به آزمایشگاه سه‌بعدی</a>
+    </aside>
+
+    <div class="xdoc__body">
+
+      <article class="xdoc__sec" id="cpu-sec-1">
+        <span class="xdoc__sec-kicker">فصل ۰۱ · مقیاس 45mm</span>
+        <h2>زیر کلاهک فلزی چه خبر است؟ چرا اولترا ۹ دیگر «یک تکه سیلیکون» نیست</h2>
+        <p>وقتی یک پردازنده‌ی رده‌بالای مدرن مثل <strong>اولترا ۹ نسل جدید</strong> را در دست می‌گیری، تنها چیزی که می‌بینی یک کلاهک فلزیِ صیقلی از مس نیکل‌اندود به نام <strong>پخش‌کننده‌ی یکپارچه‌ی حرارت</strong> (<span class="xdoc__en">IHS</span>) و هزاران پین طلایی در پشت برد است. اما لحظه‌ای که در <strong>مقیاس اول آزمایشگاه</strong> اسلایدر جداسازی لایه‌ها را می‌کشی، راز معماری نیمه‌هادی مدرن آشکار می‌شود: زیر این کلاهک دیگر یک تراشه‌ی غول‌پیکر یکپارچه نیست؛ بلکه یک <strong>شهر سه‌بعدی از چهار تایل سیلیکونی مجزا</strong> (<span class="xdoc__en">Disaggregated Chiplets</span>) است که روی یک پایه‌ی سیلیکونی مشترک به نام <span class="xdoc__en">Foveros 3D Base Tile</span> سوار شده‌اند.</p>
+        <p>چرا مهندسان مجبور شدند پردازنده را تکه-تکه کنند؟ ساخت ترانزیستورهای <strong>۳ نانومتری</strong> با دستگاه‌های لیتوگرافی فرابنفش شدید (<code>EUV</code>) فوق‌العاده گران است و هرچه سطح یک تکه سیلیکون بزرگ‌تر باشد، احتمال وجود یک نقص اتمی که کل تراشه را دورریختنی کند به‌صورت نمایی بالا می‌رود. به‌علاوه، مدارهای آنالوگ مثل درگاه‌های <span class="xdoc__en">PCIe 5.0</span> و <span class="xdoc__en">USB4</span> اصلاً با کوچک‌تر شدن به ۳ نانومتر سود زیادی نمی‌برند.</p>
+
+        <div class="xdoc__grid2">
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">تایل محاسباتی ۳ نانومتری</span>
+            <h3>فقط هسته‌ها روی گران‌ترین فناوری</h3>
+            <p>تایل محاسباتی (<span class="xdoc__en">Compute Tile</span>) شامل ۸ هسته‌ی <span class="xdoc__en">P-Core</span>، ۱۶ هسته‌ی <span class="xdoc__en">E-Core</span> و ۳۶ مگابایت کش مشترک <span class="xdoc__en">L3</span> روی پیشرفته‌ترین نود ۳ نانومتری ساخته می‌شود.</p>
+          </div>
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">اتصال عمودی سه‌بعدی TSV</span>
+            <h3>۴ تایل مستقل، یک مغز یکپارچه</h3>
+            <p>تایل‌های گرافیک (<span class="xdoc__en">Xe GPU</span>)، کنترلر حافظه و هوش مصنوعی (<span class="xdoc__en">SoC + NPU</span>) و درگاه‌ها (<span class="xdoc__en">I/O</span>) روی نودهای بهینه‌ی خود تولید و با هزاران ستون مسی عمودی (<code>TSV</code>) به هم دوخته می‌شوند.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-2">
+        <span class="xdoc__sec-kicker">فصل ۰۲ · مقیاس 2mm</span>
+        <h2>فرماندهی کل سیستم: چطور یک تراشه هم‌زمان RAM، GPU و SSD را اداره می‌کند؟</h2>
+        <p>بزرگ‌ترین شگفتی کامپیوتر این نیست که چطور دو عدد را جمع می‌زند؛ بلکه این است که چطور <strong>یک پردازنده در آنِ واحد</strong> فریم بازی <span class="xdoc__en">4K</span> را به کارت گرافیک می‌فرستد، وزن‌های یک شبکه‌ی عصبی را از حافظه‌ی <span class="xdoc__en">NVMe SSD</span> می‌خواند، صدای خروجی را بی‌وقفه پخش می‌کند و روی کلیک ماوس تو در کمتر از یک میلی‌ثانیه واکنش نشان می‌دهد.</p>
+
+        <div class="xdoc__grid2">
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">مراحل ۱ و ۲ خط لوله</span>
+            <h3>واکشی و رمزگشایی باینری (<span class="xdoc__en">Fetch &amp; Decode</span>)</h3>
+            <p>پردازنده دستور بعدی را به شکل رشته‌ی باینری (مثل <code>10001011 00001101</code>) از کش فوق‌سریع <span class="xdoc__en">L1</span> می‌آورد و رمزگشا آن را به سیگنال‌های کنترلی برای مسیرهای داخلی ترجمه می‌کند.</p>
+          </div>
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">مراحل ۳ تا ۵ خط لوله</span>
+            <h3>اجرا، حافظه و ثبت (<span class="xdoc__en">Execute, MEM, WB</span>)</h3>
+            <p>هر هسته‌ی <span class="xdoc__en">Superscalar</span> ده‌ها دستور را هم‌زمان در خط لوله می‌چیند، شاخه‌های شرطی <code>if/else</code> را با دقتی بالای <strong>۹۹ درصد</strong> پیش‌بینی می‌کند و داده‌ها را بین کش <span class="xdoc__en">L1</span> (۱٫۱ نانوثانیه)، کش <span class="xdoc__en">L3</span> و رم <span class="xdoc__en">DDR5</span> (۶۸ نانوثانیه) جابه‌جا می‌کند.</p>
+          </div>
+        </div>
+
+        <div class="xdoc__callout">
+          <span class="xdoc__callout-label">مقیاس واقعی زمان در فرکانس 5.70 GHz</span>
+          <p>اگر یک سیکل کلاک پردازنده (<strong>۰٫۱۷۵ نانوثانیه</strong>) را برابر با <strong>یک ثانیه</strong> فرض کنی، دسترسی به کش <span class="xdoc__en">L1</span> معادل <strong>۶ ثانیه</strong>، خواندن از حافظه‌ی <span class="xdoc__en">DDR5 RAM</span> معادل <strong>۶٫۵ دقیقه</strong> و خواندن از سریع‌ترین <span class="xdoc__en">NVMe SSD</span> معادل <strong>چند روز کامل</strong> است! تمام هنر معماری <span class="xdoc__en">CPU</span> این است که با پیش‌واکشی هوشمند و اجرای خارج از ترتیب، هرگز بیکار نماند تا رم یا دیسک پاسخ بدهد.</p>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-3">
+        <span class="xdoc__sec-kicker">فصل ۰۳ · مقیاس 100nm</span>
+        <h2>هیچ «ریاضیدانی» در کار نیست: چطور فقط صفر و یک محاسبه می‌کنند؟</h2>
+        <p>در <strong>مقیاس سوم آزمایشگاه</strong> تمام افسانه‌های مرموز بودن کامپیوتر فرو می‌ریزد. درون واحد حساب و منطق (<span class="xdoc__en">ALU</span>) هیچ فهم، عدد دهدهی یا هوشی وجود ندارد؛ تنها چیزی که هست، سیم‌های مسی با دو سطح ولتاژ است: <strong>۰ ولت (صفر منطقی)</strong> و حدود <strong>۰٫۸۵ ولت (یک منطقی)</strong>. مدار سه‌بعدی‌ای که روی صحنه می‌بینی یک <strong>جمع‌کننده‌ی واقعی ۴بیتی</strong> (<span class="xdoc__en">Ripple-Carry Full Adder</span>) است که هر بیت آن تنها از ترکیب سه گیت منطقی ساده ساخته شده است: <code>XOR</code>، <code>AND</code> و <code>OR</code>.</p>
+        <p>وقتی روی کلیدهای باینری <strong>A</strong> و <strong>B</strong> کلیک می‌کنی، گیت <code>XOR</code> جمع بدون رقم نقلی دو بیت را می‌سازد و گیت‌های <code>AND</code> و <code>OR</code> تعیین می‌کنند آیا یک «یک بر دست» (<span class="xdoc__en">Carry Out</span>) باید از مسیر مسی افقی به بیت سمت چپ منتقل شود یا نه. همان‌طور که روی ویفر سه‌بعدی می‌بینی، این موج ولتاژ ظرف چند پیکوثانیه از راست به چپ می‌دود و حاصل جمع ۵بیتی را روی خروجی روشن می‌کند. ضرب، تقسیم، رندر سه‌بعدی، رمزنگاری اینترنت و حتی اجرای مدل‌های بزرگ هوش مصنوعی، چیزی جز تکرار میلیاردها نسخه از همین گیت‌های ساده با سرعت ۵٫۷ میلیارد بار در ثانیه نیست.</p>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-4">
+        <span class="xdoc__sec-kicker">فصل ۰۴ · مقیاس 3nm</span>
+        <h2>سفر به دنیای ۱۵ اتمی: ترانزیستور ۳ نانومتری GAA و شبح مکانیک کوانتومی</h2>
+        <p>اما خود آن گیت‌های <code>XOR</code> و <code>AND</code> از چه ساخته شده‌اند؟ از <strong>ترانزیستورها</strong> — کلیدهای الکترونیکی بدون هیچ قطعه‌ی متحرک. در پردازنده‌های نسل قبل (<span class="xdoc__en">FinFET</span>)، گیت فلزی فقط از سه طرف روی یک تیغه‌ی سیلیکونی می‌نشست؛ اما وقتی ابعاد کانال به محدوده‌ی <strong>۱۵ تا ۲۰ اتم سیلیکون</strong> رسید، الکترون‌ها از کف کانال «در می‌رفتند» و کلید دیگر واقعاً خاموش نمی‌شد.</p>
+        <p>در پردازنده‌های نسل جدید ۳ نانومتری با معماری <span class="xdoc__en">GAA / RibbonFET</span>، مهندسان کانال را به <strong>سه نوار افقیِ فوق‌نازک سیلیکون</strong> (<span class="xdoc__en">Nanosheets</span>) روی هم تبدیل کردند و گیت فلزی به همراه لایه‌ی عایق هافنیوم دی‌اکسید (<code>HfO₂</code>) را از <strong>هر ۴ طرف (۳۶۰ درجه)</strong> دور هر نوار پیچیدند. وقتی ولتاژ گیت را بالای آستانه‌ی <code>V_th = 0.32 V</code> می‌بری، میدان الکتریکی الکترون‌ها را به درون نوارها می‌کشد و جریان بین <span class="xdoc__en">Source</span> و <span class="xdoc__en">Drain</span> برقرار می‌شود (منطقی <strong>۱</strong>).</p>
+
+        <div class="xdoc__callout">
+          <span class="xdoc__callout-label">شبح مکانیک کوانتومی در حالت خاموش (0.10 V)</span>
+          <p>وقتی در مقیاس چهارم اسلایدر ولتاژ گیت را به <strong>۰٫۱۰ ولت (خاموش)</strong> می‌آوری، دیوار قرمز سد پتانسیل بالا می‌رود و جریان اصلی متوقف می‌شود — ولی هنوز تک‌تک الکترون‌های قرمز از میان سد عبور می‌کنند! این خطای نرم‌افزاری نیست؛ این <strong>تونل‌زنی کوانتومی</strong> (<span class="xdoc__en">Quantum Tunneling</span>) است. در ضخامت چند اتم، تابع موج الکترون از دیواره‌ی عایق نفوذ می‌کند و <strong>جریان نشتی استاتیک</strong> می‌سازد؛ پدیده‌ای که حتی در حالت بیکاری، برق مصرف می‌کند و گرما تولید می‌کند.</p>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-5">
+        <span class="xdoc__sec-kicker">فصل ۰۵ · دوربین حرارتی FLIR</span>
+        <h2>فیزیک گرما: دقیقاً چرا CPU داغ می‌شود و چرا ولتاژ قاتل دماست؟</h2>
+        <p>یک پردازنده‌ی رده‌بالا زیر بار سنگین می‌تواند بیش از <strong>۲۰۰ وات</strong> گرما را در مساحتی کوچک‌تر از یک تمبر پستی متمرکز کند — چگالی حرارتی‌ای که از صفحه‌ی یک اتو هم بیشتر است! اما این انرژی دقیقاً در کجا به گرما تبدیل می‌شود؟ پاسخ در معادله‌ی بنیادین توان نیمه‌هادی <span class="xdoc__en">CMOS</span> است که در <strong>مقیاس پنجم</strong> هم‌زمان با حل‌کننده‌ی عددی پخش گرمای دوبعدی (<code>48×48 Heat PDE</code>) اجرا می‌شود:</p>
+
+        <div class="xdoc__formula">
+          <span class="xdoc__formula-eq">P<sub>total</sub> = α · C<sub>eff</sub> · V² · f &nbsp;+&nbsp; I<sub>leak</sub>(T) · V</span>
+          <small>بخش اول توان دینامیکی (وابسته به مجذور ولتاژ <code>V²</code> و فرکانس <code>f</code>) و بخش دوم توان نشتی کوانتومی که با بالا رفتن دمای سیلیکون به‌صورت نمایی رشد می‌کند.</small>
+        </div>
+
+        <div class="xdoc__grid2">
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">عامل اول · گرمایش ژول و فونون‌ها</span>
+            <h3>برخورد الکترون با اتم‌های سیلیکون</h3>
+            <p>در هر تپش کلاک، میلیاردها خازن میکروسکوپی گیت شارژ و دشارژ می‌شوند. الکترون‌های شتاب‌گرفته به اتم‌های کریستال سیلیکون برخورد می‌کنند و انرژی خود را به <strong>فونون‌ها (لرزش شبکه)</strong> می‌دهند که در مقیاس ماکروسکوپی همان گرماست.</p>
+          </div>
+          <div class="xdoc__card xdoc__card--warn">
+            <span class="xdoc__card-tag">عامل دوم · انفجار مربع ولتاژ V² و PROCHOT</span>
+            <h3>چرا کمی افزایش ولتاژ فاجعه می‌سازد؟</h3>
+            <p>بالا بردن ولتاژ از <code>1.05 V</code> به <code>1.35 V</code> (فقط ۲۸٪ رشد) توان دینامیکی را <strong>۶۵ درصد</strong> منفجر می‌کند! به محض رسیدن دمای هسته به <strong>۱۰۰ درجه‌ی سانتی‌گراد</strong>، سیگنال <code>PROCHOT</code> فرکانس را خودکار پایین می‌کشد تا سیلیکون نسوزد.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-6">
+        <span class="xdoc__sec-kicker">فصل ۰۶ · صداقت علمی</span>
+        <h2>مرز میان فیزیک واقعی و ساده‌سازی بصری در این آزمایشگاه</h2>
+        <p>در پلتفرم علمی استودیو نویدیکس همیشه شفاف مشخص می‌کنیم کدام بخش‌ها محاسبه‌ی دقیق مهندسی هستند و کجا برای وضوح بصری ساده‌سازی کرده‌ایم:</p>
+
+        <div class="xdoc__grid2">
+          <div class="xdoc__card xdoc__card--ok">
+            <span class="xdoc__card-tag">محاسبه‌ی واقعی در لحظه</span>
+            <h3>آنچه صددرصد واقعی است</h3>
+            <p>منطق بولی جمع‌کننده‌ی ۴بیتی (تمامی گیت‌های <code>XOR/AND/OR</code> و انتشار رقم نقلی)، معادله‌ی توان <code>α·C·V²·f</code>، رشد نمایی جریان نشتی بر حسب دما، حل عددی تفاضل محدودِ معادله‌ی گرمای دوبعدی روی شبکه‌ی <code>48×48</code> با پالت معتبر <span class="xdoc__en">Ironbow FLIR</span> و منطق <code>PROCHOT</code> در ۱۰۰ درجه.</p>
+          </div>
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">ساده‌سازی برای درک بصری</span>
+            <h3>آنچه خلاصه شده است</h3>
+            <p>در تراشه‌ی واقعی، سیم‌کشی مسی (<span class="xdoc__en">BEOL</span>) شامل ۱۵ تا ۱۸ طبقه‌ی درهم‌تنیده و هر هسته دارای بیش از ۲۰۰ مرحله‌ی بافر و اجرای خارج از ترتیب است. در مقیاس چهارم، الکترون‌ها به‌صورت ذرات کلاسیک با احتمال تونل‌زنی نشان داده شده‌اند نه بسته‌های موجی کوانتومی کامل.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-7">
+        <span class="xdoc__sec-kicker">فصل ۰۷ · چالش‌های تعاملی</span>
+        <h2>۵ آزمایش پیشنهادی که همین الان روی صحنه‌ی سه‌بعدی امتحان کن</h2>
+        <ul class="xdoc__obs">
+          <li><i>۰۱</i><span>در <b>مقیاس اول (45mm)</b> اسلایدر جداسازی لایه‌ها را روی <b>۱۰۰٪</b> بگذار یا دکمه‌ی <code>X-Ray IHS</code> را بزن و مستقیماً روی هرکدام از <b>۴ تایل سیلیکونی</b> کلیک کن تا جزئیات ترانزیستورها و کش <span class="xdoc__en">L3</span> باز شود.</span></li>
+          <li><i>۰۲</i><span>در <b>مقیاس دوم (2mm)</b> سناریوی <b>«استنتاج هوش مصنوعی»</b> را انتخاب کن و با دکمه‌ی <b>«+۱ پالس کلاک»</b> (یا کلید <code>S</code>) زمان را فریز کن تا حرکت دستور باینری از <span class="xdoc__en">NVMe</span> به <span class="xdoc__en">DDR5</span> و هسته را ببینی.</span></li>
+          <li><i>۰۳</i><span>در <b>مقیاس سوم (100nm)</b> عدد A را روی <b>۱۵</b> (<code>1111</code>) و عدد B را روی <b>۱</b> (<code>0001</code>) بگذار: موج <code>Carry-Out</code> مثل دومینو از بیت صفر تا چهار روی سیم‌های مسی می‌دود و سرریز <code>10000</code> (۱۶) را روشن می‌کند.</span></li>
+          <li><i>۰۴</i><span>در <b>مقیاس چهارم (3nm)</b> ولتاژ گیت را روی <b>۰٫۱۰ ولت</b> بگذار تا تونل‌زنی ذرات قرمز از سد را ببینی؛ سپس روی <b>۰٫۸۵ ولت</b> برگردان و جرقه‌های برخورد الکترون با اتم‌های لرزان را تماشا کن.</span></li>
+          <li><i>۰۵</i><span>در <b>مقیاس پنجم (FLIR)</b> روی «رندر سنگین ۲۴ هسته»، خنک‌کننده را <b>خاموش</b> کن یا ولتاژ را به <b>۱٫۴۲ ولت</b> برسان و ببین چطور ۸ هسته‌ی <span class="xdoc__en">P-Core</span> سفید-داغ می‌شوند و هشدار <code>PROCHOT</code> در ۱۰۰ درجه فرکانس را پایین می‌کشد.</span></li>
+        </ul>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-sec-faq">
+        <span class="xdoc__sec-kicker">فصل ۰۸ · پرسش‌های پرتکرار و منابع</span>
+        <h2>پرسش‌های پرتکرار مهندسی (FAQ)</h2>
+        <div class="xdoc__faq">
+          <details open>
+            <summary>پردازنده‌ی ۳ نانومتری کلاس اولترا ۹ واقعاً چه چیزی درون خودش دارد؟</summary>
+            <p>برخلاف پردازنده‌های قدیمی که یک تکه سیلیکون یکپارچه بودند، پردازنده‌های مدرن کلاس اولترا ۹ با معماری چیپلت سه‌بعدی (مانند <span class="xdoc__en">Foveros 3D</span>) ساخته می‌شوند. زیر کلاهک فلزی <span class="xdoc__en">IHS</span> چهار تایل مجزای سیلیکونی قرار دارد: تایل محاسباتی ۳ نانومتری شامل هسته‌های پرقدرت <span class="xdoc__en">P-Core</span>، هسته‌های کم‌مصرف <span class="xdoc__en">E-Core</span> و کش مشترک <span class="xdoc__en">L3</span>؛ تایل گرافیک مجتمع <span class="xdoc__en">Xe</span>؛ تایل <span class="xdoc__en">SoC</span> شامل کنترلر <span class="xdoc__en">DDR5</span> و موتور هوش مصنوعی <span class="xdoc__en">NPU</span>؛ و تایل <span class="xdoc__en">I/O</span> برای خطوط پرسرعت <span class="xdoc__en">PCIe 5.0</span> و <span class="xdoc__en">Thunderbolt</span> که همگی با هزاران اتصال عمودی مسی (<code>TSV</code>) به هم وصل‌اند.</p>
+          </details>
+          <details>
+            <summary>CPU چطور تنها با صفر و یک کل سیستم (RAM، کارت گرافیک، SSD و نمایشگر) را مدیریت می‌کند؟</summary>
+            <p>درون پردازنده تمام دستورها، داده‌ها و آدرس‌های سخت‌افزاری به شکل رشته‌های باینری (سطوح ولتاژ ۰ و ۰٫۸۵ ولت) هستند. هر هسته در هر ثانیه تا ۵٫۷ میلیارد بار چرخه‌ی خط لوله‌ی پنج‌مرحله‌ای <span class="xdoc__en">Fetch, Decode, Execute, Memory, Writeback</span> را اجرا می‌کند و از طریق گذرگاه‌های مسی اختصاصی، فرمان‌های خواندن حافظه، رندر گرافیکی و وقفه‌های سخت‌افزاری را در مقیاس نانوثانیه زمان‌بندی می‌کند.</p>
+          </details>
+          <details>
+            <summary>آیا «۳ نانومتر» واقعاً به معنای اندازه‌ی فیزیکی خود ترانزیستور است؟</summary>
+            <p>خیر؛ «۳ نانومتر» امروز یک نام تجاری برای نسل فناوری لیتوگرافی (<span class="xdoc__en">Process Node</span>) است و نه طول دقیق هر ترانزیستور. با این حال ابعاد بحرانی درون ترانزیستور — به‌ویژه ضخامت نوارهای سیلیکونی نانوشیت (حدود ۵ تا ۶ نانومتر) و لایه‌ی عایق گیت <code>HfO₂</code> (حدود ۱ تا ۲ نانومتر) — واقعاً در مقیاس چند ده اتم سیلیکون قرار دارند؛ جایی که تونل‌زنی کوانتومی به چالش اصلی مهندسی تبدیل می‌شود.</p>
+          </details>
+          <details>
+            <summary>تفاوت ترانزیستور جدید GAA (RibbonFET) با FinFET قدیمی چیست؟</summary>
+            <p>در ترانزیستورهای <span class="xdoc__en">FinFET</span> قدیمی، گیت فلزی فقط از سه طرف روی یک تیغه‌ی عمودی سیلیکون می‌نشست و در ابعاد زیر ۵ نانومتر دیگر نمی‌توانست جریان نشتی را مهار کند. در معماری <span class="xdoc__en">Gate-All-Around</span> (<span class="xdoc__en">GAA / RibbonFET</span>)، کانال از چند نوار افقی فوق‌العاده نازک سیلیکون روی هم ساخته می‌شود و گیت فلزی از هر ۴ طرف آن‌ها را در آغوش می‌گیرد تا کنترل الکتروستاتیکی ۳۶۰ درجه نشت جریان را مهار کند.</p>
+          </details>
+          <details>
+            <summary>چرا CPU هنگام کار سنگین داغ می‌شود؟ ریشه‌ی فیزیکی حرارت پردازنده چیست؟</summary>
+            <p>حرارت پردازنده نتیجه‌ی مستقیم دو پدیده‌ی فیزیکی است: اول توان دینامیکی (<code>P = α·C·V²·f</code>) که هنگام شارژ و دشارژ میلیاردها خازن میکروسکوپی گیت در هر سیکل کلاک، انرژی الکتریکی را از طریق برخورد الکترون‌ها به اتم‌های شبکه‌ی کریستالی سیلیکون (تولید فونون و گرمایش ژول) به گرما تبدیل می‌کند؛ و دوم توان استاتیک ناشی از تونل‌زنی کوانتومی و جریان نشتی زیرآستانه که با بالا رفتن دمای تراشه به‌صورت نمایی تشدید می‌شود.</p>
+          </details>
+          <details>
+            <summary>چرا افزایش جزئی ولتاژ پردازنده (اورکلاک) باعث جهش ناگهانی دما و مصرف برق می‌شود؟</summary>
+            <p>در معادله‌ی توان دینامیکی <span class="xdoc__en">CMOS</span> یعنی <code>P = α·C·V²·f</code>، فرکانس (<code>f</code>) به توان ۱ اما ولتاژ (<code>V</code>) به توان ۲ ضرب می‌شود. یعنی اگر ولتاژ را فقط ۲۰ درصد بالا ببری، توان حرارتی حدود ۴۴ درصد بیشتر می‌شود؛ و اگر هم‌زمان فرکانس را هم زیاد کنی، هر دو اثر در هم ضرب شده و دمای هسته به‌سرعت به مرز بحرانی ۱۰۰ درجه‌ی سانتی‌گراد می‌رسد.</p>
+          </details>
+          <details>
+            <summary>Thermal Throttling یا PROCHOT در ۱۰۰ درجه‌ی سانتی‌گراد چیست؟</summary>
+            <p>وقتی دمای نقطه‌ی داغ سیلیکون (<span class="xdoc__en">Junction Temperature</span>) به آستانه‌ی ایمنی حدود ۱۰۰ درجه‌ی سانتی‌گراد نزدیک می‌شود، حسگرهای حرارتی داخلی پردازنده سیگنال سخت‌افزاری <code>PROCHOT</code> را فعال می‌کنند. واحد مدیریت توان (<span class="xdoc__en">PMU</span>) در کسری از میلی‌ثانیه ولتاژ و فرکانس کلاک را کاهش می‌دهد تا توان حرارتی افت کند و سیلیکون از آسیب دائمی در امان بماند.</p>
+          </details>
+        </div>
+
+        <h2 style="margin-top:32px">منابع علمی و مراجع مهندسی</h2>
+        <ul class="xdoc__refs">
+          <li><i>[1]</i><span><span class="xdoc__en">Hennessy, J. L. &amp; Patterson, D. A.</span> — «Computer Architecture: A Quantitative Approach» (ویرایش ششم) — مرجع اصلی خط لوله‌ی دستورالعمل، حافظه‌ی سلسله‌مراتبی و معماری Superscalar.</span></li>
+          <li><i>[2]</i><span><span class="xdoc__en">Dennard, R. H.</span> و همکاران — «Design of Ion-Implanted MOSFET's with Very Small Physical Dimensions»، <span class="xdoc__en">IEEE JSSC</span>، ۱۹۷۴ — قانون مقیاس‌گذاری دنارد و ریشه‌ی بحران توان.</span></li>
+          <li><i>[3]</i><span><span class="xdoc__en">Rabaey, J. M., Chandrakasan, A., Nikolić, B.</span> — «Digital Integrated Circuits: A Design Perspective» — مدل فیزیکی توان دینامیکی <code>α·C·V²·f</code> و جریان نشتی زیرآستانه در CMOS.</span></li>
+          <li><i>[4]</i><span><span class="xdoc__en">Landauer, R.</span> — «Irreversibility and Heat Generation in the Computing Process»، <span class="xdoc__en">IBM Journal of R&amp;D</span>، ۱۹۶۱ — حد بنیادین ترمودینامیکی پاک کردن یک بیت اطلاعات.</span></li>
+          <li><i>[5]</i><span><span class="xdoc__en">IEEE IEDM &amp; ISSCC</span> — مقالات معماری <span class="xdoc__en">3nm Gate-All-Around (GAA / RibbonFET)</span> و بسته‌بندی سه‌بعدی چیپلت <span class="xdoc__en">Foveros 3D</span>.</span></li>
+        </ul>
+      </article>
+
+      <div class="xdoc__bridge">
+        <div class="xdoc__bridge-copy">
+          <h3>روی همین سیلیکون‌های ۳ نانومتری، مدل‌های هوش مصنوعی ۲۰۲۶ اجرا می‌شوند</h3>
+          <p>از همین گیت‌های منطقی و ضرب ماتریسی، مدل‌های پرچم‌داری مثل <strong>Claude Fable 5.2</strong>، <strong>GPT-6.2 Astra</strong>، <strong>Gemini 4 Neon</strong> و <strong>DeepSeek V4.1</strong> متولد شده‌اند. در استودیو نویدیکس می‌توانی بدون تحریم با همه‌ی آن‌ها کدنویسی، تحلیل مهندسی و طراحی کنی.</p>
+        </div>
+        <a class="xbtn xbtn--go" href="https://navidixstudio.com/studio.html">
+          <span>ورود به استودیو نویدیکس</span>
+          <svg class="xbtn__ind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14M12 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<nav class="xwrap" aria-label="تجربه‌های دیگر">
+  <div class="xnext">
+    <a href="https://navidixstudio.com/explore/geometry-of-meaning/"><small>تجربه‌ی ۰۶</small><b>هندسه‌ی معنا — ماشین چطور بدون «فهمیدن» می‌فهمد؟</b></a>
+    <a href="https://navidixstudio.com/explore/hidden-network/"><small>تجربه‌ی ۰۵</small><b>شبکه‌ی پنهان — چرا اینترنت مقاوم و شکننده است</b></a>
+  </div>
+</nav>
+
+</main>
+
+<footer class="xfoot">
+  <p><span aria-hidden="true">©</span> ۱۴۰۵ <b>استودیو نویدیکس</b> — ساخته‌ی <a href="https://navidixstudio.com/about.html"><b>محمد نویدی</b></a>. تمام حقوق محفوظ است.<br />بازنشر با ذکر منبع آزاد است، فروشش نه.</p>
+</footer>
+
+<script src="./sim/inside-a-cpu.js"></script>
+<script>
+(function () {
+  function init() {
+    if (window.NVXCPULab) window.NVXCPULab.mount('#stage');
+    var toc = document.querySelectorAll('[data-xdoc-toc] a');
+    if (toc.length && 'IntersectionObserver' in window) {
+      var byId = {};
+      toc.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (en.isIntersecting && byId[en.target.id]) {
+            toc.forEach(function (a) { a.classList.remove('is-active'); });
+            byId[en.target.id].classList.add('is-active');
+          }
+        });
+      }, { rootMargin: '-20% 0px -65% 0px' });
+      Object.keys(byId).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+</body>
+</html>

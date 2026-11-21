@@ -1,0 +1,1089 @@
+/* =====================================================================
+   NAVIDIX — INSIDE A 3NM CPU (EXPERIENCE 07)
+   Precision Semiconductor Cleanroom & Oscilloscope CAD Stylesheet
+
+   Aesthetic: Obsidian Silicon (#050608), Titanium Anodized Panels,
+   Photolithography Copper/Gold (#D8A458 / #C76D3B), Clinical Ice Cyan
+   (#67E8F9), Thermal Crimson (#E31B23), FLIR Amber (#FF7A3D).
+   Zero cartoonish styling — built like a real silicon engineering tool.
+   ===================================================================== */
+
+:root {
+  --cpu-void:      #040507;
+  --cpu-plate:     #0A0D12;
+  --cpu-plate-hi:  #10151E;
+  --cpu-line:      rgba(148, 163, 184, 0.14);
+  --cpu-line-hi:   rgba(216, 164, 88, 0.32);
+  --cpu-gold:      #D8A458;
+  --cpu-copper:    #D97745;
+  --cpu-cyan:      #67E8F9;
+  --cpu-emerald:   #34D399;
+  --cpu-red:       #E31B23;
+  --cpu-hot:       #FF5E3A;
+  --cpu-glass:     rgba(7, 9, 13, 0.84);
+  --cpu-glass-hi:  rgba(12, 16, 24, 0.92);
+}
+
+#stage, #science {
+  scroll-margin-top: 78px;
+}
+#science.xdoc {
+  --xdoc-accent: #D8A458;
+  --xdoc-accent-soft: rgba(216, 164, 88, .12);
+  --xdoc-accent-line: rgba(216, 164, 88, .36);
+}
+
+/* ---------- Hero Badges & Semiconductor Spec Strip ---------- */
+.cpu-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 14px;
+}
+.cpu-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: 4px;
+  border: 1px solid rgba(216, 164, 88, 0.34);
+  background: rgba(216, 164, 88, 0.08);
+  color: #F4DFB8;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+.cpu-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--cpu-gold);
+  box-shadow: 0 0 8px rgba(216, 164, 88, 0.7);
+}
+.cpu-tag--red {
+  border-color: rgba(227, 27, 35, 0.45);
+  background: rgba(227, 27, 35, 0.11);
+  color: var(--xp-paper);
+}
+.cpu-tag--red::before {
+  background: var(--cpu-red);
+  box-shadow: 0 0 8px var(--cpu-red);
+}
+.cpu-tag--mono {
+  font-family: var(--xp-f-mono);
+  font-size: 11px;
+  letter-spacing: .04em;
+  border-color: rgba(103, 232, 249, 0.22);
+  background: rgba(103, 232, 249, 0.06);
+  color: var(--cpu-cyan);
+}
+.cpu-tag--mono::before {
+  background: var(--cpu-cyan);
+  box-shadow: 0 0 8px rgba(103, 232, 249, 0.6);
+}
+
+.cpu-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(22px, 3.4vh, 32px);
+}
+
+/* =====================================================================
+   THE SILICON OBSERVATORY COCKPIT (.cpx-fs)
+   ===================================================================== */
+.cpx-fs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- Zoom Scale & Chapter Rail ---------- */
+.cpx-rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 7px;
+}
+@media (max-width: 640px) {
+  .cpx-rail { grid-template-columns: repeat(2, 1fr); }
+  .cpx-rail .cpx-step:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+.cpx-step {
+  appearance: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--cpu-line);
+  background: linear-gradient(180deg, #0D1118 0%, #07090D 100%);
+  color: var(--xp-dim);
+  font-family: var(--xp-f-fa);
+  text-align: start;
+  transition: border-color .28s var(--xp-ease), background .28s var(--xp-ease), color .28s ease, box-shadow .28s ease;
+}
+.cpx-step__top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.cpx-step__no {
+  font-family: var(--xp-f-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: rgba(237, 242, 250, 0.34);
+}
+.cpx-step__scale {
+  font-family: var(--xp-f-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: var(--cpu-gold);
+  background: rgba(216, 164, 88, 0.06);
+  direction: ltr;
+}
+.cpx-step__title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(237, 242, 250, 0.84);
+  line-height: 1.35;
+}
+.cpx-step:hover {
+  border-color: rgba(216, 164, 88, 0.42);
+  background: linear-gradient(180deg, #131924 0%, #0A0D13 100%);
+}
+.cpx-step[aria-current="true"] {
+  border-color: rgba(227, 27, 35, 0.72);
+  background: linear-gradient(180deg, rgba(227, 27, 35, 0.16) 0%, rgba(12, 15, 22, 0.96) 100%);
+  box-shadow: 0 0 24px -10px rgba(227, 27, 35, 0.65), inset 0 1px 0 rgba(255, 106, 90, 0.2);
+}
+.cpx-step[aria-current="true"] .cpx-step__no {
+  color: var(--xp-red-soft);
+}
+.cpx-step[aria-current="true"] .cpx-step__title {
+  color: #fff;
+}
+.cpx-step[aria-current="true"] .cpx-step__scale {
+  border-color: rgba(227, 27, 35, 0.45);
+  background: rgba(227, 27, 35, 0.16);
+  color: #FFD2C8;
+}
+
+/* =====================================================================
+   THE 3D HARDWARE STAGE
+   ===================================================================== */
+.cpx-stage {
+  position: relative;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 7px;
+  background:
+    radial-gradient(85% 75% at 50% 38%, #0E131D 0%, #05070A 72%),
+    #040507;
+  overflow: hidden;
+  box-shadow:
+    0 28px 75px -32px rgba(0, 0, 0, 0.96),
+    inset 0 1px 0 rgba(216, 164, 88, 0.12);
+}
+
+/* Subtle CAD corner reticles */
+.cpx-stage::before,
+.cpx-stage::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+.cpx-stage::before {
+  inset: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.05);
+  border-radius: 4px;
+}
+
+.cpx-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(430px, 62vh, 650px);
+  cursor: grab;
+  touch-action: pan-y;
+}
+.cpx-canvas.is-dragging { cursor: grabbing; }
+.cpx-canvas.is-hovering { cursor: pointer; }
+
+@media (max-width: 640px) {
+  .cpx-canvas { height: clamp(350px, 52vh, 460px); }
+}
+
+/* ---------- Projected 3D Engineering Callouts ---------- */
+.cpx-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+}
+.cpx-callout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3.5px 9px 3.5px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+  background: rgba(5, 7, 11, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-inline-start: 2px solid var(--c, var(--cpu-gold));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--xp-f-fa);
+  font-size: 11px;
+  line-height: 1.25;
+  color: rgba(237, 242, 250, 0.92);
+  opacity: 0;
+  transition: opacity .24s ease;
+  will-change: transform, opacity;
+}
+.cpx-callout b { font-weight: 600; color: #fff; unicode-bidi: isolate; }
+.cpx-callout em {
+  font-style: normal;
+  font-family: var(--xp-f-mono);
+  font-size: 10px;
+  color: var(--c, var(--cpu-gold));
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.cpx-callout.is-hot {
+  border-color: rgba(255, 94, 58, 0.72);
+  background: rgba(28, 9, 8, 0.90);
+}
+.cpx-callout.is-active {
+  border-color: rgba(103, 232, 249, 0.72);
+  background: rgba(8, 19, 28, 0.92);
+  box-shadow: 0 0 18px -6px rgba(103, 232, 249, 0.55);
+}
+
+/* ---------- In-Stage Top Telemetry & Hardware Controls ---------- */
+.cpx-hud-top {
+  position: absolute;
+  top: 12px;
+  inset-inline: 12px;
+  z-index: 8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+.cpx-hud-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  pointer-events: auto;
+  max-width: 72%;
+}
+.cpx-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5.5px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: var(--cpu-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 11px;
+  color: var(--xp-dim);
+}
+.cpx-stat strong {
+  font-family: var(--xp-f-mono);
+  font-weight: 600;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+.cpx-stat--scale {
+  border-color: rgba(216, 164, 88, 0.42);
+}
+.cpx-stat--scale strong { color: var(--cpu-gold); }
+.cpx-stat--hot {
+  border-color: rgba(255, 94, 58, 0.55);
+}
+.cpx-stat--hot strong { color: var(--cpu-hot); }
+.cpx-stat--cyan strong { color: var(--cpu-cyan); }
+.cpx-stat--throttle {
+  border-color: rgba(227, 27, 35, 0.85);
+  background: rgba(56, 10, 12, 0.92);
+  color: #FFD2C8;
+  animation: cpuPulseAlert 1s ease-in-out infinite alternate;
+}
+@keyframes cpuPulseAlert {
+  from { box-shadow: 0 0 0 0 rgba(227, 27, 35, 0.3); }
+  to   { box-shadow: 0 0 18px 0 rgba(227, 27, 35, 0.65); }
+}
+
+.cpx-stage-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+.cpx-tool {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 33px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: var(--cpu-glass);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--xp-paper);
+  font-family: var(--xp-f-fa);
+  font-size: 11.5px;
+  transition: border-color .22s ease, background .22s ease;
+}
+.cpx-tool svg { width: 14px; height: 14px; flex: 0 0 auto; }
+.cpx-tool:hover {
+  border-color: rgba(216, 164, 88, 0.6);
+  background: var(--cpu-glass-hi);
+}
+.cpx-tool[aria-pressed="true"] {
+  border-color: rgba(216, 164, 88, 0.72);
+  background: rgba(216, 164, 88, 0.16);
+  color: #FFF4DD;
+}
+.cpx-tool--fs {
+  border-color: rgba(227, 27, 35, 0.55);
+  background: rgba(227, 27, 35, 0.16);
+}
+.cpx-tool--fs:hover {
+  border-color: rgba(255, 106, 90, 0.85);
+  background: rgba(227, 27, 35, 0.28);
+}
+.cpx-tool--dock { display: none; }
+
+@media (max-width: 720px) {
+  .cpx-hud-metrics { max-width: 60%; }
+  .cpx-stat { padding: 4px 7px; font-size: 10px; }
+  .cpx-tool span { display: none; }
+  .cpx-tool--fs span { display: inline; }
+}
+
+/* ---------- Die Tile Inspector Floating HUD ---------- */
+.cpx-inspector {
+  position: absolute;
+  inset-inline-end: 14px;
+  bottom: 14px;
+  z-index: 9;
+  width: min(330px, calc(100% - 28px));
+  max-height: calc(100% - 76px);
+  overflow-y: auto;
+  padding: 13px 15px;
+  border-radius: 6px;
+  border: 1px solid rgba(216, 164, 88, 0.34);
+  background: rgba(7, 10, 15, 0.94);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.94);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216, 164, 88, 0.35) transparent;
+}
+.cpx-inspector[hidden] { display: none; }
+.cpx-insp__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cpx-insp__name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+}
+.cpx-insp__node {
+  font-family: var(--xp-f-mono);
+  font-size: 10.5px;
+  color: var(--cpu-gold);
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(216, 164, 88, 0.3);
+  background: rgba(216, 164, 88, 0.08);
+}
+.cpx-insp__close {
+  appearance: none;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--cpu-line);
+  background: transparent;
+  color: var(--xp-dim);
+  display: grid;
+  place-items: center;
+}
+.cpx-insp__close:hover { color: #fff; border-color: var(--cpu-red); }
+.cpx-insp__desc {
+  margin: 0 0 10px;
+  font-size: 12.2px;
+  line-height: 1.85;
+  color: rgba(237, 242, 250, 0.78);
+}
+.cpx-insp__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.cpx-insp__kv {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--cpu-line);
+  background: rgba(255, 255, 255, 0.02);
+}
+.cpx-insp__kv span { display: block; font-size: 10px; color: var(--xp-dim); margin-bottom: 2px; }
+.cpx-insp__kv b {
+  font-family: var(--xp-f-mono);
+  font-size: 11.5px;
+  color: var(--cpu-cyan);
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* ---------- FLIR Scale Legend Bar (Visible in Thermal Mode) ---------- */
+.cpx-flir-bar {
+  position: absolute;
+  inset-inline-start: 14px;
+  bottom: 42px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 94, 58, 0.32);
+  background: rgba(7, 9, 14, 0.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: var(--xp-f-mono);
+  font-size: 10.5px;
+  color: var(--xp-paper);
+  direction: ltr;
+}
+.cpx-flir-bar[hidden] { display: none; }
+.cpx-flir-grad {
+  width: 110px;
+  height: 8px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #0D1333, #4A126B, #B52B56, #F76D31, #FFF2B2);
+}
+
+.cpx-hint {
+  position: absolute;
+  inset-inline-start: 14px;
+  bottom: 12px;
+  z-index: 6;
+  margin: 0;
+  padding: 4.5px 9px;
+  border-radius: 4px;
+  background: rgba(5, 7, 11, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  font-size: 11px;
+  color: rgba(237, 242, 250, 0.62);
+  pointer-events: none;
+  transition: opacity .6s ease;
+}
+.cpx-hint.is-gone { opacity: 0; }
+
+/* =====================================================================
+   ENGINEERING COCKPIT DECK
+   ===================================================================== */
+.cpx-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.cpx-story {
+  padding: 14px 17px;
+  border: 1px solid var(--cpu-line);
+  border-inline-start: 3px solid var(--cpu-gold);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #0D1119 0%, #080A0F 100%);
+  font-size: 13.6px;
+  line-height: 2;
+  color: rgba(237, 242, 250, 0.84);
+}
+.cpx-story b, .cpx-story strong { color: #fff; font-weight: 600; }
+
+.cpx-panel {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, #0E131D 0%, #080B10 100%);
+}
+.cpx-panel[hidden] { display: none; }
+
+.cpx-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 11px;
+}
+.cpx-panel__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cpx-panel__code {
+  font-family: var(--xp-f-mono);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(216, 164, 88, 0.28);
+  color: var(--cpu-gold);
+  background: rgba(216, 164, 88, 0.08);
+  direction: ltr;
+}
+
+/* Segmented Hardware Buttons */
+.cpx-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+.cpx-pill {
+  appearance: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--cpu-line);
+  background: #07090D;
+  color: rgba(237, 242, 250, 0.78);
+  font-family: var(--xp-f-fa);
+  font-size: 12.2px;
+  transition: border-color .22s ease, background .22s ease, color .22s ease;
+}
+.cpx-pill:hover {
+  border-color: rgba(216, 164, 88, 0.45);
+  color: #fff;
+}
+.cpx-pill[aria-pressed="true"] {
+  border-color: rgba(227, 27, 35, 0.75);
+  background: rgba(227, 27, 35, 0.16);
+  color: #fff;
+}
+
+/* Sliders */
+.cpx-sliders {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.cpx-sl-card {
+  border: 1px solid var(--cpu-line);
+  border-radius: 5px;
+  padding: 11px 13px 13px;
+  background: rgba(6, 8, 12, 0.85);
+}
+.cpx-sl-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cpx-sl-label { font-size: 12.2px; color: rgba(237, 242, 250, 0.86); }
+.cpx-sl-val {
+  font-family: var(--xp-f-mono);
+  font-size: 12px;
+  color: var(--cpu-gold);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+.cpx-sl-card input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+  display: block;
+  margin: 0;
+}
+.cpx-sl-card input[type=range]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to left, var(--cpu-red), rgba(216, 164, 88, 0.45));
+}
+.cpx-sl-card input[type=range]::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to left, var(--cpu-red), rgba(216, 164, 88, 0.45));
+}
+.cpx-sl-card input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5.5px;
+  border-radius: 2px;
+  background: #F8FAFC;
+  border: 2px solid var(--cpu-gold);
+  box-shadow: 0 0 0 3px rgba(216, 164, 88, 0.22);
+}
+.cpx-sl-card input[type=range]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: #F8FAFC;
+  border: 2px solid var(--cpu-gold);
+  box-shadow: 0 0 0 3px rgba(216, 164, 88, 0.22);
+}
+
+/* ---------- Pipeline / System Execution Telemetry (Chapter 02) ---------- */
+.cpx-pipe-stages {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 11px;
+}
+@media (max-width: 680px) {
+  .cpx-pipe-stages { grid-template-columns: repeat(2, 1fr); }
+}
+.cpx-pstage {
+  padding: 8px 9px;
+  border-radius: 4px;
+  border: 1px solid var(--cpu-line);
+  background: #06080C;
+  transition: border-color .2s ease, background .2s ease;
+}
+.cpx-pstage.is-now {
+  border-color: rgba(216, 164, 88, 0.85);
+  background: rgba(216, 164, 88, 0.14);
+}
+.cpx-pstage small {
+  display: block;
+  font-family: var(--xp-f-mono);
+  font-size: 9.5px;
+  color: var(--xp-dim);
+  direction: ltr;
+}
+.cpx-pstage b {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: #fff;
+}
+
+.cpx-bus-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  border: 1px solid rgba(103, 232, 249, 0.22);
+  background: rgba(6, 11, 17, 0.9);
+  margin-bottom: 10px;
+}
+.cpx-asm {
+  font-family: var(--xp-f-mono);
+  font-size: 12.5px;
+  color: var(--cpu-cyan);
+  direction: ltr;
+}
+.cpx-bin {
+  font-family: var(--xp-f-mono);
+  font-size: 11.5px;
+  color: var(--cpu-gold);
+  letter-spacing: .08em;
+  direction: ltr;
+}
+
+/* ---------- Binary DIP Switch Calculator (Chapter 03) ---------- */
+.cpx-bin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+@media (max-width: 780px) {
+  .cpx-bin-grid { grid-template-columns: 1fr; }
+}
+.cpx-dip-group {
+  padding: 11px 13px;
+  border-radius: 5px;
+  border: 1px solid var(--cpu-line);
+  background: #06080C;
+}
+.cpx-dip-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 9px;
+  font-size: 12px;
+  color: var(--xp-dim);
+}
+.cpx-dip-head b {
+  font-family: var(--xp-f-mono);
+  font-size: 14px;
+  color: #fff;
+  direction: ltr;
+}
+.cpx-dip-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  direction: ltr;
+}
+.cpx-bit {
+  appearance: none;
+  cursor: pointer;
+  padding: 9px 0;
+  border-radius: 4px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: #0C1017;
+  color: rgba(237, 242, 250, 0.45);
+  font-family: var(--xp-f-mono);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all .2s ease;
+}
+.cpx-bit small { font-size: 9px; font-weight: 400; opacity: .65; }
+.cpx-bit[aria-pressed="true"] {
+  border-color: var(--cpu-gold);
+  background: rgba(216, 164, 88, 0.22);
+  color: #FFF4DD;
+  box-shadow: 0 0 18px -6px rgba(216, 164, 88, 0.85);
+}
+.cpx-sum-box {
+  padding: 13px 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(52, 211, 153, 0.36);
+  background: rgba(52, 211, 153, 0.08);
+  text-align: center;
+  min-width: 175px;
+}
+.cpx-sum-box small { display: block; font-size: 11px; color: var(--xp-dim); margin-bottom: 4px; }
+.cpx-sum-dec {
+  font-family: var(--xp-f-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cpu-emerald);
+  direction: ltr;
+}
+.cpx-sum-bits {
+  margin-top: 4px;
+  font-family: var(--xp-f-mono);
+  font-size: 13px;
+  letter-spacing: .16em;
+  color: #fff;
+  direction: ltr;
+}
+
+/* ---------- Transistor & Thermal Readouts (Chapters 04 & 05) ---------- */
+.cpx-readout-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 8px;
+  margin-top: 11px;
+}
+.cpx-meter {
+  padding: 9px 11px;
+  border-radius: 5px;
+  border: 1px solid var(--cpu-line);
+  background: #06080C;
+}
+.cpx-meter span { display: block; font-size: 10.5px; color: var(--xp-dim); margin-bottom: 4px; }
+.cpx-meter b {
+  font-family: var(--xp-f-mono);
+  font-size: 14.5px;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  display: inline-block;
+}
+
+/* ---------- Bottom Control Strip ---------- */
+.cpx-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.cpx-bar__group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* =====================================================================
+   TRUE SPATIAL FULLSCREEN MODE (.cpx-fs.is-full)
+   ===================================================================== */
+.cpx-fs:fullscreen,
+.cpx-fs.is-full {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: #040507;
+  gap: 0;
+  overflow: hidden;
+  z-index: 999999;
+}
+.cpx-fs.is-faux {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 999999 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+}
+html.cpx-locked, html.cpx-locked body {
+  overflow: hidden !important;
+}
+html.cpx-locked .topbar,
+html.cpx-locked .nvx-promo,
+html.cpx-locked [class*="nvx-push"],
+html.cpx-locked [id*="nvx-push"] {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+@media (min-width: 901px) {
+  .cpx-fs.is-full .cpx-stage {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    border-radius: 0;
+    z-index: 1;
+  }
+  .cpx-fs.is-full .cpx-canvas { width: 100%; height: 100%; }
+  .cpx-fs.is-full .cpx-rail {
+    position: absolute;
+    top: 14px;
+    inset-inline-start: 16px;
+    z-index: 12;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(100vw - 390px);
+    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: rgba(6, 8, 13, 0.84);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .cpx-fs.is-full .cpx-step {
+    padding: 6px 10px;
+    gap: 2px;
+  }
+  .cpx-fs.is-full .cpx-step__title { font-size: 11.5px; }
+  .cpx-fs.is-full .cpx-hud-top {
+    top: 14px;
+    inset-inline: 16px;
+    justify-content: flex-end;
+  }
+  .cpx-fs.is-full .cpx-hud-metrics {
+    position: absolute;
+    top: 66px;
+    inset-inline-start: 0;
+    max-width: 540px;
+  }
+  .cpx-fs.is-full .cpx-tool--dock { display: inline-flex; }
+  .cpx-fs.is-full .cpx-deck {
+    position: absolute;
+    bottom: 16px;
+    inset-inline-start: 16px;
+    z-index: 12;
+    width: min(600px, calc(100vw - 360px));
+    max-height: 46vh;
+    overflow-y: auto;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(216, 164, 88, 0.26);
+    background: rgba(6, 9, 14, 0.88);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 26px 65px -20px rgba(0, 0, 0, 0.95);
+    transition: transform .34s var(--xp-ease), opacity .28s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(216, 164, 88, 0.34) transparent;
+  }
+  .cpx-fs.is-full .cpx-deck::-webkit-scrollbar { width: 6px; }
+  .cpx-fs.is-full .cpx-deck::-webkit-scrollbar-track { background: transparent; }
+  .cpx-fs.is-full .cpx-deck::-webkit-scrollbar-thumb {
+    background: rgba(216, 164, 88, 0.32);
+    border-radius: 99px;
+  }
+  .cpx-fs.is-full.is-dock-hidden .cpx-deck {
+    transform: translateY(calc(100% + 26px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .cpx-fs.is-full .cpx-story { padding: 10px 13px; font-size: 12.4px; line-height: 1.85; }
+  .cpx-fs.is-full .cpx-panel { padding: 11px 13px; }
+  .cpx-fs.is-full .cpx-bar { display: none; }
+  .cpx-fs.is-full .cpx-hint { bottom: 16px; inset-inline-start: auto; inset-inline-end: 16px; }
+  .cpx-fs.is-full .cpx-flir-bar { bottom: 52px; inset-inline-start: auto; inset-inline-end: 16px; }
+  .cpx-fs.is-full .cpx-inspector { bottom: 16px; inset-inline-end: 16px; }
+}
+
+@media (max-width: 900px) {
+  .cpx-fs.is-full {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cpx-fs.is-full .cpx-stage {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border: 0;
+    border-bottom: 1px solid var(--cpu-line);
+    border-radius: 0;
+    flex: 0 0 auto;
+  }
+  .cpx-fs.is-full .cpx-canvas { height: 54dvh; }
+  .cpx-fs.is-full .cpx-rail,
+  .cpx-fs.is-full .cpx-deck { padding-inline: 14px; }
+  .cpx-fs.is-full .cpx-rail { padding-top: 12px; grid-template-columns: repeat(2, 1fr); }
+  .cpx-fs.is-full .cpx-deck { padding-bottom: 24px; }
+}
+
+/* =====================================================================
+   EDITORIAL PROSE BLOCKS (SPECS, FORMULA, FAQ, STUDIO CTA)
+   ===================================================================== */
+.cpu-spec-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin: 20px 0 26px;
+}
+.cpu-spec-card {
+  padding: 14px 15px;
+  border-radius: 5px;
+  border: 1px solid var(--cpu-line);
+  border-top: 2px solid rgba(216, 164, 88, 0.55);
+  background: var(--cpu-plate);
+}
+.cpu-spec-card small { display: block; font-size: 11px; color: var(--xp-dim); margin-bottom: 5px; }
+.cpu-spec-card b {
+  font-family: var(--xp-f-mono);
+  font-size: 17px;
+  color: #fff;
+  direction: ltr;
+  display: inline-block;
+}
+.cpu-spec-card span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: rgba(237, 242, 250, 0.6);
+}
+
+.cpu-formula {
+  margin: 18px 0 22px;
+  padding: 16px 18px;
+  border-radius: 5px;
+  border: 1px solid rgba(216, 164, 88, 0.28);
+  background: linear-gradient(180deg, rgba(16, 20, 28, 0.92), rgba(8, 10, 14, 0.96));
+  text-align: center;
+  direction: ltr;
+  font-family: var(--xp-f-mono);
+  font-size: clamp(13px, 1.5vw, 15.5px);
+  color: var(--cpu-gold);
+  overflow-x: auto;
+}
+.cpu-formula small {
+  display: block;
+  margin-top: 8px;
+  direction: rtl;
+  font-family: var(--xp-f-fa);
+  font-size: 12.5px;
+  color: var(--xp-dim);
+}
+
+.cpu-faq {
+  display: grid;
+  gap: 9px;
+  margin-top: 16px;
+}
+.cpu-faq details {
+  border: 1px solid var(--cpu-line);
+  border-radius: 5px;
+  background: var(--cpu-plate);
+  padding: 13px 16px;
+}
+.cpu-faq details[open] {
+  border-color: rgba(216, 164, 88, 0.36);
+  background: var(--cpu-plate-hi);
+}
+.cpu-faq summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--xp-paper);
+  line-height: 1.75;
+}
+.cpu-faq summary::-webkit-details-marker { display: none; }
+.cpu-faq summary::after {
+  content: '+';
+  font-family: var(--xp-f-mono);
+  font-size: 18px;
+  color: var(--cpu-gold);
+  flex: 0 0 auto;
+}
+.cpu-faq details[open] summary::after { content: '−'; color: var(--cpu-cyan); }
+.cpu-faq details p {
+  margin: 12px 0 2px;
+  font-size: 13.8px;
+  line-height: 2.05;
+  color: rgba(237, 242, 250, 0.78);
+}
+
+.cpu-bridge {
+  margin-top: 34px;
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid rgba(216, 164, 88, 0.34);
+  background: linear-gradient(135deg, rgba(216, 164, 88, 0.08), rgba(10, 13, 18, 0.96) 56%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cpu-bridge__copy { max-width: 52ch; }
+.cpu-bridge__copy h3 { margin: 0 0 6px; font-size: 16px; color: #fff; }
+.cpu-bridge__copy p { margin: 0; font-size: 13.5px; line-height: 1.95; color: rgba(237, 242, 250, 0.76); }
