@@ -4,8 +4,9 @@
 
 **Zoom 15,000,000× inside a flagship 3nm CPU — from an explodable Foveros 3D package down to a 4-bit silicon adder, a 3nm GAA nanosheet transistor with quantum tunneling, and a real-time 48×48 2D Heat PDE FLIR thermal camera.**
 
-[![Live Demo](https://img.shields.io/badge/Live_Interactive_Demo-navidixstudio.com-E31B23?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/)
+[![Live Demo (EN)](https://img.shields.io/badge/Live_Interactive_Demo-navidixstudio.com-E31B23?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)
 [![Zero Build](https://img.shields.io/badge/Zero_Build-Vanilla_JS_%2B_Three.js-D8A458?style=for-the-badge)](#run-locally-in-10-seconds)
+[![Bilingual](https://img.shields.io/badge/UI-English_%2F_Persian_(1--Click)-67E8F9?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)
 [![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](./LICENSE)
 
 *Part of [**Navidix Interactive Science Platform**](https://navidixstudio.com/explore/) · Built solo by [**Mohammad Navidi**](https://github.com/NavidixStudio).*
@@ -17,12 +18,12 @@
 <table>
   <tr>
     <td width="50%" align="center">
-      <a href="https://navidixstudio.com/explore/inside-a-cpu/"><img src="./assets/screenshots/lab-3nm-cpu-package.png" alt="Explodable 3nm Ultra 9 Foveros 3D Package" /></a>
+      <a href="https://navidixstudio.com/explore/inside-a-cpu/?lang=en"><img src="./assets/screenshots/lab-3nm-cpu-package.png" alt="Explodable 3nm Ultra 9 Foveros 3D Package" /></a>
       <br/><b>Scale 01 (45 mm): Explodable 3nm Foveros 3D Package</b>
       <br/><sub>Brushed Nickel-Cu IHS, 160 SMD Caps, 144 Copper TSVs &amp; 4 Clickable Dies</sub>
     </td>
     <td width="50%" align="center">
-      <a href="https://navidixstudio.com/explore/inside-a-cpu/?c=thermal"><img src="./assets/screenshots/lab-3nm-cpu-flir.png" alt="Real-Time 48x48 2D Heat PDE FLIR Thermal Map" /></a>
+      <a href="https://navidixstudio.com/explore/inside-a-cpu/?c=thermal&lang=en"><img src="./assets/screenshots/lab-3nm-cpu-flir.png" alt="Real-Time 48x48 2D Heat PDE FLIR Thermal Map" /></a>
       <br/><b>Scale 05 (FLIR °C): Live 48×48 2D Heat PDE &amp; PROCHOT</b>
       <br/><sub>Authentic Ironbow FLIR overlay, P = α·C·V²·f + I_leak(T)·V &amp; 100°C Throttling</sub>
     </td>
@@ -55,7 +56,7 @@ cd inside-a-3nm-cpu
 npx serve .
 ```
 
-Or open the hosted live experience directly: **[`navidixstudio.com/explore/inside-a-cpu/`](https://navidixstudio.com/explore/inside-a-cpu/)**
+Or open the hosted live experience directly (English UI): **[`navidixstudio.com/explore/inside-a-cpu/?lang=en`](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)** (includes a 1-click `EN / فا` language switcher inside the header and 3D stage).
 
 ---
 

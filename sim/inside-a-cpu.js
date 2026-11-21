@@ -798,6 +798,211 @@
   ];
 
   /* =====================================================================
+     3B. ENGLISH BILINGUAL DICTIONARY (100% COVERAGE FOR GLOBAL VISITORS)
+     ===================================================================== */
+  var TILES_INFO_EN = {
+    compute: {
+      name: 'Compute Tile (3nm Silicon Die)',
+      node: '3nm GAA',
+      desc: 'Main processor brain: houses 8 high-performance P-Cores for heavy single-thread math, 16 efficiency E-Cores for massive throughput, and 36 MB of shared L3 cache linked by a high-speed ring bus.',
+      specs: [
+        ['Transistor Count', '~11.4 Billion'],
+        ['Core Topology', '8P + 16E (24C)'],
+        ['Max Boost Clock', 'Up to 5.70 GHz'],
+        ['Shared L3 Cache', '36 MB Ring Bus']
+      ]
+    },
+    gpu: {
+      name: 'Integrated Graphics (Xe GPU Tile)',
+      node: '4nm / 3nm',
+      desc: 'Parallel graphics and media engine: Xe vector engines handle desktop compositing, hardware 8K AV1 video decode, and GPU compute without waking the main CPU cores.',
+      specs: [
+        ['Architecture', 'Xe-LPG+ Graphics'],
+        ['Media Engine', 'AV1 / HEVC 8K'],
+        ['Interconnect', 'Foveros Base'],
+        ['Idle Power', '< 1.2 W']
+      ]
+    },
+    soc: {
+      name: 'SoC, AI Engine (NPU) & Memory Controller',
+      node: '5nm / 3nm',
+      desc: 'System traffic orchestrator: dual-channel DDR5 memory controller, dedicated neural processing unit (NPU) systolic array for low-power AI inference, plus chip-wide power and clock management.',
+      specs: [
+        ['Memory Support', 'DDR5-6400+'],
+        ['Neural Engine', 'Systolic NPU Array'],
+        ['Power Control', 'PMU + DVFS'],
+        ['RAM Latency', '~68 ns']
+      ]
+    },
+    io: {
+      name: 'High-Speed Interconnect (I/O Tile)',
+      node: '6nm',
+      desc: 'Gateway to the outside world: drives 20 lanes of PCIe 5.0 for discrete GPUs and NVMe SSDs alongside Thunderbolt and USB4 high-speed controllers.',
+      specs: [
+        ['GPU Interface', 'PCIe 5.0 x16'],
+        ['Direct Storage', 'PCIe 5.0 NVMe'],
+        ['Bandwidth', '128 GB/s'],
+        ['3D Packaging', 'Foveros 3D TSV']
+      ]
+    },
+    ihs: {
+      name: 'Integrated Heat Spreader (Nickel-Copper IHS)',
+      node: '45 × 37.5 mm',
+      desc: 'Precision-machined nickel-plated copper lid that protects fragile 3nm silicon dies and conducts concentrated core heat through Solder TIM (STIM) across a wide cooler contact surface.',
+      specs: [
+        ['Material', 'Nickel-Plated Cu'],
+        ['Thermal Bond', 'Solder TIM'],
+        ['Socket Package', 'LGA 1851'],
+        ['Thermal Capacity', '250+ W TDP']
+      ]
+    }
+  };
+
+  var SYSTEM_PROGRAMS_EN = {
+    game: {
+      title: '4K Game Frame Render',
+      ops: [
+        { asm: 'LD  R1, [DDR5:0x8F40]', bin: '10001011 00001101 10001111', bus: 'ram',  cache: 'RAM → L3 (68 ns)', desc: 'Loading 3D scene vertex transforms from DDR5 memory into CPU cache' },
+        { asm: 'FMUL V0, V1, V2',      bin: '11000100 11100010 01011001', bus: 'core', cache: 'L1 Hit (1.1 ns)',  desc: 'Computing physics and camera projection matrices inside the P-Core vector ALU' },
+        { asm: 'FADD V0, V0, V3',      bin: '11000100 11100010 01011000', bus: 'core', cache: 'L1 Hit (1.1 ns)',  desc: 'Accumulating lighting and shadow vectors in a single 0.17 ns clock cycle' },
+        { asm: 'ST  [PCIe:GPU], V0',   bin: '10001001 00111010 11010010', bus: 'gpu',  cache: 'PCIe 5.0 Tx',      desc: 'Dispatching GPU Draw Call packets across PCIe 5.0 copper lanes' },
+        { asm: 'SYNC DISPLAY_VBLANK',  bin: '00001111 10101110 11110000', bus: 'disp', cache: 'HDMI / DP Out',    desc: 'Synchronizing the completed frame with the 240 Hz display output' }
+      ]
+    },
+    ai: {
+      title: 'AI Matrix Inference',
+      ops: [
+        { asm: 'DMA NVMe → DDR5',      bin: '11110010 00010000 01000001', bus: 'ssd',  cache: 'NVMe 14 GB/s',     desc: 'Streaming neural network weight shards from NVMe SSD into DDR5 RAM' },
+        { asm: 'LD  W_MAT, [DDR5]',    bin: '10001011 01010101 00111100', bus: 'ram',  cache: 'DDR5 Burst',       desc: 'Feeding quantized weight blocks from the SoC memory controller into L3 cache' },
+        { asm: 'VFMADD231PS ZMM0',     bin: '01100010 11110010 10111000', bus: 'core', cache: 'L1 Hit (1.1 ns)',  desc: 'Executing fused multiply-add matrix operations across wide SIMD vector registers' },
+        { asm: 'SOFTMAX  LOGITS',      bin: '01100010 10110001 01101111', bus: 'core', cache: 'L2 Hit (4.2 ns)',  desc: 'Converting layer logits into a probability distribution for next-token sampling' },
+        { asm: 'OUT TOKEN → DISPLAY',  bin: '10001001 11000011 00000101', bus: 'disp', cache: 'I/O Bus',          desc: 'Streaming the generated token onto the display pipeline within milliseconds' }
+      ]
+    },
+    browser: {
+      title: 'Web Browser Tab Load',
+      ops: [
+        { asm: 'IRQ  NIC_PACKET',      bin: '11001101 00100001 00001010', bus: 'disp', cache: 'Interrupt #34',    desc: 'Receiving a hardware network interrupt (IRQ) via the I/O Tile' },
+        { asm: 'LD  DOM, [DDR5]',      bin: '10001011 00100100 10100101', bus: 'ram',  cache: 'L2 Miss → RAM',    desc: 'Fetching parsed DOM nodes and JavaScript bytecode from main DDR5 memory' },
+        { asm: 'CMP  RAX, RBX',        bin: '01001000 00111001 11011000', bus: 'core', cache: 'Branch Predict',   desc: 'Speculative branch prediction running at >99% accuracy on a P-Core' },
+        { asm: 'ST  TEX → PCIe:GPU',   bin: '10001001 01000111 11110001', bus: 'gpu',  cache: 'PCIe 5.0',         desc: 'Uploading composited page layers to the GPU for final pixel rasterization' },
+        { asm: 'CACHE_FLUSH → NVMe',   bin: '00001111 10101110 00111000', bus: 'ssd',  cache: 'SSD Write',        desc: 'Persisting browser disk cache to NVMe SSD asynchronously without UI stutter' }
+      ]
+    }
+  };
+
+  var CHAPTERS_EN = {
+    package: {
+      no: '01', title: 'Ultra 9 Teardown',
+      story: 'This is a next-gen <b>3nm Ultra 9 class processor</b> built with <b>Foveros 3D chiplet packaging</b>. Drag the <b>Explode / Delid</b> slider to lift the brushed nickel-copper IHS lid and reveal 4 disaggregated silicon tiles, 160 SMD MLCC capacitors, and 144 vertical copper TSVs. <b>Click any silicon tile</b> to inspect its engineering specs.'
+    },
+    system: {
+      no: '02', title: 'System Orchestration',
+      story: 'How does one CPU simultaneously coordinate RAM, GPU, NVMe SSD, and display output? Up to <b>5.7 billion times per second</b>, each core cycles through <b>Fetch → Decode → Execute → Memory → Writeback</b>. Pick a real workload or hit <b>+1 Clock Step</b> (key <code>S</code>) to freeze time and trace binary machine instructions over copper buses.'
+    },
+    logic: {
+      no: '03', title: 'Binary Logic (ALU)',
+      story: 'There is no mathematician inside a CPU — only copper traces toggling between <b>0 V (logic 0)</b> and <b>0.85 V (logic 1)</b>. Below is a live <b>4-bit Ripple-Carry Full Adder</b> wired from real <code>XOR</code>, <code>AND</code>, and <code>OR</code> gates. Toggle binary switches <b>A</b> and <b>B</b> and watch the carry voltage wave race across silicon in picoseconds.'
+    },
+    transistor: {
+      no: '04', title: '3nm GAA Transistor',
+      story: 'Welcome to the deepest scale: <b>3nm — a channel roughly 15 silicon atoms wide</b>. In modern <b>Gate-All-Around (GAA / RibbonFET)</b> transistors, the metal gate wraps 360° around 3 stacked silicon nanosheets. Drop gate voltage (<code>V_GS</code>) below <b>0.32 V</b> to see red electrons still leaking via <b>quantum tunneling</b> — then switch ON and watch collisions shake the crystal lattice into heat.'
+    },
+    thermal: {
+      no: '05', title: 'Why CPUs Get Hot',
+      story: 'CPU heat comes from real CMOS physics: switching billions of microscopic gate capacitors (<b>P = α·C·V²·f</b>), electron-phonon lattice collisions, and <b>exponential quantum leakage</b> that worsens as silicon heats up. Raise voltage to see power explode with <b>V²</b>, or remove the cooler to trigger automatic <b>100°C PROCHOT thermal throttling</b> on the live 48×48 FLIR PDE.'
+    }
+  };
+
+  var CALLOUTS_EN = {
+    tile_ihs:  ['Nickel-Cu IHS Lid', 'Heat Spreader'],
+    sys_cpu:   ['Ultra 9 CPU Socket', '5-Stage Pipeline'],
+    sys_ram:   ['DDR5 System RAM', '68 ns · Dual-Ch'],
+    sys_gpu:   ['PCIe 5.0 GPU', '128 GB/s'],
+    sys_ssd:   ['NVMe Gen5 SSD', '14 GB/s'],
+    sys_disp:  ['Display & I/O Bus', 'DisplayPort / IRQ'],
+    logic_in:  ['Binary Inputs A & B', '0V / 0.85V'],
+    logic_out: ['5-Bit Ripple Sum', 'Copper Outputs'],
+    mos_src:   ['Source Terminal', 'n+ Silicon'],
+    mos_gate:  ['360° GAA Metal Gate', '3nm · HfO₂'],
+    mos_drn:   ['Drain Terminal', 'n+ Silicon'],
+    mos_rib:   ['3 Silicon Nanosheets', '~15 Atoms Wide']
+  };
+
+  var UI_EN = {
+    'page.title': 'Inside a 3nm CPU — Interactive 3D Ultra 9 Architecture, GAA Transistor & FLIR Thermal Lab | Navidix',
+    'nav.explore': '← Interactive Science Labs',
+    'crumb.home': 'Navidix',
+    'crumb.explore': 'Science Labs',
+    'crumb.cur': 'Inside a 3nm CPU',
+    'hero.tag1': 'Experience 07 · Hardware & Silicon Physics Lab',
+    'hero.tag2': '3nm Ultra 9 Class · Foveros 3D Chiplets',
+    'hero.h1': 'Inside a 3nm CPU<span class="xhero__en">From Disaggregated Silicon Package to Quantum Gate &amp; FLIR Heat PDE</span>',
+    'hero.lede': 'Beneath a silent palm-sized metal lid, <b>~18 billion atomic switches</b> toggle 5.7 billion times every second. Lift the brushed nickel-copper heat spreader of a flagship <b>3nm Ultra 9</b> processor and zoom <b>15,000,000×</b> from Foveros 3D chiplets and DDR5/PCIe 5.0 buses down to a live 4-bit silicon adder, a 15-atom-wide <b>GAA RibbonFET</b> transistor, and a real-time <b>48×48 FLIR Heat PDE</b> camera.',
+    'hero.cta1': 'Launch 3D Silicon Lab',
+    'hero.cta2': 'Engineering Deep Dive & Equations',
+    'stage.q': 'How do pure <b>electrical 1s and 0s</b> orchestrate 4K gaming, AI inference, DDR5 RAM, and display output simultaneously — and why does a slight voltage bump send temperatures soaring? <b>Zoom through five true physical scales and test it live.</b>',
+    'step.1.no': '01', 'step.1.t': 'Ultra 9 Teardown',
+    'step.2.no': '02', 'step.2.t': 'System Orchestration',
+    'step.3.no': '03', 'step.3.t': 'Binary Logic (ALU)',
+    'step.4.no': '04', 'step.4.t': '3nm GAA Transistor',
+    'step.5.no': '05', 'step.5.t': 'Why CPUs Get Hot',
+    'tool.orbit': 'Orbit',
+    'tool.dock.hide': 'Hide Panel',
+    'tool.dock.show': 'Show Panel',
+    'tool.fs.enter': 'Fullscreen',
+    'tool.fs.exit': 'Exit Fullscreen',
+    'tool.fs.bar': 'Fullscreen Mode',
+    'stage.hint': 'Drag to orbit 3D · Scroll to zoom · Click any silicon tile to inspect · Press F for Fullscreen',
+    'p1.title': 'Disassemble the 3D Package <span class="cpx-panel__code">LGA-1851 · Foveros 3D</span>',
+    'p1.xray': 'X-Ray IHS Lid',
+    'p1.sl': 'Vertical Layer Separation (Delid / Explode)',
+    'p2.title': 'System Orchestration &amp; Pipeline <span class="cpx-panel__code">5-Stage Superscalar Pipeline</span>',
+    'p2.step': '+1 Clock Step (S)',
+    'p2.auto': 'Auto Clock',
+    'p2.game': '4K Game Frame Render',
+    'p2.ai': 'AI Matrix Inference',
+    'p2.browser': 'Web Browser Tab Load',
+    'p2.s1': 'Instruction Fetch',
+    'p2.s2': 'Binary Decode',
+    'p2.s3': 'ALU Execution',
+    'p2.s4': 'RAM / PCIe Access',
+    'p2.s5': 'Register Writeback',
+    'p3.title': 'Live 4-Bit Silicon Hardware Adder <span class="cpx-panel__code">4-Bit Ripple-Carry Full Adder</span>',
+    'p3.ina': 'Input A (click bits to toggle)',
+    'p3.inb': 'Input B (click bits to toggle)',
+    'p3.sumlbl': 'Exact Sum on Copper Traces',
+    'p4.title': '360° Gate Control on a 3nm Transistor <span class="cpx-panel__code">GAA RibbonFET · V_th = 0.32 V</span>',
+    'p4.pr1': 'OFF 0.10 V (Quantum Leak)',
+    'p4.pr2': 'Threshold 0.32 V',
+    'p4.pr3': 'Full ON 0.85 V (Logic 1)',
+    'p4.sl': 'Metal Gate Voltage (V_GS)',
+    'p4.m1': 'Logic Switch State',
+    'p4.m2': 'Channel Current (I_DS)',
+    'p4.m3': 'Subthreshold Leakage',
+    'p4.m4': 'Crystal Lattice Phonons',
+    'p5.title': 'Live 2D Heat PDE &amp; FLIR Camera <span class="cpx-panel__code">P = α·C·V²·f + I_leak(T)·V</span>',
+    'p5.wl1': 'Idle',
+    'p5.wl2': '4K Gaming',
+    'p5.wl3': '24-Core Heavy Render',
+    'p5.c1': '360mm AIO Liquid',
+    'p5.c2': 'Air Tower Cooler',
+    'p5.c3': 'No Cooler (Stress Test)',
+    'p5.slf': 'Clock Frequency (f · linear)',
+    'p5.slv': 'Core Voltage (V · squared V²!)',
+    'p5.m1': 'Dynamic Power (αCV²f)',
+    'p5.m2': 'Quantum Leakage Power',
+    'p5.m3': 'Total Heat Output (TDP)',
+    'p5.m4': 'Peak Junction Temp (Tj)',
+    'bar.reset': 'Reset All Scales',
+    'next.1.k': 'Experience 06',
+    'next.1.t': 'The Geometry of Meaning — How LLMs Represent Thought in 3D',
+    'next.2.k': 'Experience 05',
+    'next.2.t': 'The Hidden Network — Why the Internet Is Both Resilient and Fragile',
+    'foot.copy': '<span aria-hidden="true">©</span> 2026 <b>Navidix Studio</b> — Built solo by <a href="https://navidixstudio.com/about.html"><b>Mohammad Navidi</b></a>.<br />Open-sourced under MIT on <a href="https://github.com/NavidixStudio/inside-a-3nm-cpu"><b>GitHub</b></a>.'
+  };
+
+  /* =====================================================================
      4. MAIN ENGINE MOUNT
      ===================================================================== */
   function mountCPULab(rootSel) {
@@ -826,6 +1031,7 @@
     };
 
     var state = {
+      lang: 'fa',
       chapter: 'package',
       running: true,
       ready: false,
@@ -864,6 +1070,34 @@
       cooler: 'aio360',
       thermalStats: { pDyn: 148, pLeak: 16, pTotal: 164, maxT: 74, avgT: 58, throttled: false, effFreq: 5.2 }
     };
+
+    /* Language Detection: ?lang=en|fa > saved preference > document default */
+    (function detectInitialLang() {
+      var def = (document.documentElement.getAttribute('data-default-lang') || 'fa').toLowerCase();
+      var chosen = def === 'en' ? 'en' : 'fa';
+      try {
+        var saved = localStorage.getItem('nvx_cpu_lang');
+        if (saved === 'en' || saved === 'fa') chosen = saved;
+      } catch (_) {}
+      try {
+        var qLang = (new URL(location.href).searchParams.get('lang') || '').toLowerCase();
+        if (qLang === 'en' || qLang === 'fa') chosen = qLang;
+      } catch (_) {}
+      state.lang = chosen;
+    })();
+
+    function isEn() { return state.lang === 'en'; }
+    function getTileInfo(k) { return (isEn() ? TILES_INFO_EN[k] : TILES_INFO[k]) || TILES_INFO[k]; }
+    function getProgram(k) {
+      var map = isEn() ? SYSTEM_PROGRAMS_EN : SYSTEM_PROGRAMS;
+      return map[k] || map.game;
+    }
+    function getChapter(id) {
+      var base = CHAPTERS.find(function (x) { return x.id === id; }) || CHAPTERS[0];
+      if (!isEn()) return base;
+      var ov = CHAPTERS_EN[base.id] || {};
+      return { id: base.id, scale: base.scale, camera: base.camera, no: ov.no || base.no, title: ov.title || base.title, story: ov.story || base.story };
+    }
 
     try {
       var qCh = new URL(location.href).searchParams.get('c');
@@ -937,7 +1171,10 @@
       fsBtns.forEach(function (b) {
         b.setAttribute('aria-pressed', String(on));
         var sp = b.querySelector('span');
-        if (sp) sp.textContent = on ? 'خروج از تمام‌صفحه' : 'تمام‌صفحه';
+        if (sp) {
+          if (isEn()) sp.textContent = on ? UI_EN['tool.fs.exit'] : (b.classList.contains('xbtn') ? UI_EN['tool.fs.bar'] : UI_EN['tool.fs.enter']);
+          else sp.textContent = on ? 'خروج از تمام‌صفحه' : (b.classList.contains('xbtn') ? 'حالت تمام‌صفحه' : 'تمام‌صفحه');
+        }
       });
       onResize();
       setTimeout(onResize, 60);
@@ -961,13 +1198,20 @@
       document.addEventListener(ev, function () { if (!fauxFull) paintFull(); });
     });
 
+    function paintDockBtn() {
+      if (!dockBtn) return;
+      dockBtn.setAttribute('aria-pressed', String(state.dockHidden));
+      var sp = dockBtn.querySelector('span');
+      if (sp) {
+        if (isEn()) sp.textContent = state.dockHidden ? UI_EN['tool.dock.show'] : UI_EN['tool.dock.hide'];
+        else sp.textContent = state.dockHidden ? 'نمایش پنل' : 'مخفی‌کردن پنل';
+      }
+    }
     if (dockBtn) {
       dockBtn.addEventListener('click', function () {
         state.dockHidden = !state.dockHidden;
         fsWrap.classList.toggle('is-dock-hidden', state.dockHidden);
-        dockBtn.setAttribute('aria-pressed', String(state.dockHidden));
-        var sp = dockBtn.querySelector('span');
-        if (sp) sp.textContent = state.dockHidden ? 'نمایش پنل' : 'مخفی‌کردن پنل';
+        paintDockBtn();
       });
     }
 
@@ -983,7 +1227,10 @@
       playBtns.forEach(function (b) {
         b.setAttribute('aria-pressed', String(state.running));
         var sp = b.querySelector('span');
-        if (sp) sp.textContent = state.running ? 'توقف' : 'اجرا';
+        if (sp) {
+          if (isEn()) sp.textContent = state.running ? 'Pause' : 'Play';
+          else sp.textContent = state.running ? 'توقف' : 'اجرا';
+        }
       });
     }
     playBtns.forEach(function (b) {
@@ -996,14 +1243,14 @@
       if (inspectorEl) inspectorEl.hidden = true;
     }
     function openInspector(tileKey) {
-      var info = TILES_INFO[tileKey];
+      var info = getTileInfo(tileKey);
       if (!info || !inspectorEl) return;
       state.selectedTile = tileKey;
       inspectorEl.innerHTML =
         '<div class="cpx-insp__head">' +
           '<span class="cpx-insp__name">' + info.name + '</span>' +
           '<span class="cpx-insp__node">' + info.node + '</span>' +
-          '<button type="button" class="cpx-insp__close" aria-label="بستن" data-cpu-insp-x>×</button>' +
+          '<button type="button" class="cpx-insp__close" aria-label="' + (isEn() ? 'Close' : 'بستن') + '" data-cpu-insp-x>×</button>' +
         '</div>' +
         '<p class="cpx-insp__desc">' + info.desc + '</p>' +
         '<div class="cpx-insp__grid">' +
@@ -1065,7 +1312,7 @@
     });
 
     function advancePipelineTick() {
-      var pr = SYSTEM_PROGRAMS[state.program] || SYSTEM_PROGRAMS.game;
+      var pr = getProgram(state.program);
       state.cycleCount++;
       state.pipeStage = (state.pipeStage + 1) % 5;
       if (state.pipeStage === 0) state.opIndex = (state.opIndex + 1) % pr.ops.length;
@@ -1073,7 +1320,7 @@
     }
 
     function paintSystemPanel() {
-      var pr = SYSTEM_PROGRAMS[state.program] || SYSTEM_PROGRAMS.game;
+      var pr = getProgram(state.program);
       var op = pr.ops[state.opIndex] || pr.ops[0];
       var stEls = root.querySelectorAll('[data-cpu-pstage]');
       stEls.forEach(function (el, idx) { el.classList.toggle('is-now', idx === state.pipeStage); });
@@ -1125,14 +1372,16 @@
       var leakEl = root.querySelector('[data-cpu-mos-leak]');
       var phEl = root.querySelector('[data-cpu-mos-ph]');
       if (stEl) {
-        stEl.textContent = on ? 'ON — منطقی 1' : 'OFF — منطقی 0';
+        stEl.textContent = isEn() ? (on ? 'ON — Logic 1' : 'OFF — Logic 0') : (on ? 'ON — منطقی 1' : 'OFF — منطقی 0');
         stEl.style.color = on ? '#34D399' : '#94A3B8';
       }
       var iDrain = on ? Math.pow(state.gateV - state.vTh, 1.55) * 420 : 0;
       var iLeak = 2.4 + Math.exp(state.gateV * 5.2) * 0.85;
       if (curEl) curEl.textContent = on ? (iDrain.toFixed(0) + ' µA') : '0 µA';
-      if (leakEl) leakEl.textContent = iLeak.toFixed(1) + ' nA (تونل‌زنی کوانتومی)';
-      if (phEl) phEl.textContent = on ? 'بالا (تولید حرارت ژول)' : 'حداقل (فقط نشت استاتیک)';
+      if (leakEl) leakEl.textContent = iLeak.toFixed(1) + (isEn() ? ' nA (Quantum Tunneling)' : ' nA (تونل‌زنی کوانتومی)');
+      if (phEl) phEl.textContent = isEn()
+        ? (on ? 'High (Joule Heating)' : 'Minimal (Static Leak Only)')
+        : (on ? 'بالا (تولید حرارت ژول)' : 'حداقل (فقط نشت استاتیک)');
     }
     if (slGate) slGate.addEventListener('input', function () {
       state.gateV = parseFloat(slGate.value);
@@ -1192,31 +1441,32 @@
     var lastHudHtml = '';
     function paintMetricsHUD() {
       if (!metricsEl) return;
-      var ch = CHAPTERS.find(function (x) { return x.id === state.chapter; }) || CHAPTERS[0];
-      var out = ['<span class="cpx-stat cpx-stat--scale">مقیاس: <strong>' + ch.scale + '</strong></span>'];
+      var en = isEn();
+      var ch = getChapter(state.chapter);
+      var out = ['<span class="cpx-stat cpx-stat--scale">' + (en ? 'Scale' : 'مقیاس') + ': <strong>' + ch.scale + '</strong></span>'];
       if (state.chapter === 'package') {
-        out.push('<span class="cpx-stat">فناوری: <strong>3nm GAA · Foveros 3D</strong></span>');
-        out.push('<span class="cpx-stat cpx-stat--cyan">ترانزیستورها: <strong>~18B</strong></span>');
+        out.push('<span class="cpx-stat">' + (en ? 'Node' : 'فناوری') + ': <strong>3nm GAA · Foveros 3D</strong></span>');
+        out.push('<span class="cpx-stat cpx-stat--cyan">' + (en ? 'Transistors' : 'ترانزیستورها') + ': <strong>~18B</strong></span>');
       } else if (state.chapter === 'system') {
-        var pr = SYSTEM_PROGRAMS[state.program] || SYSTEM_PROGRAMS.game;
-        out.push('<span class="cpx-stat cpx-stat--cyan">کلاک: <strong>5.70 GHz (0.17 ns)</strong></span>');
-        out.push('<span class="cpx-stat">سیکل: <strong>#' + state.cycleCount + '</strong></span>');
-        out.push('<span class="cpx-stat">سناریو: <strong>' + pr.title + '</strong></span>');
+        var pr = getProgram(state.program);
+        out.push('<span class="cpx-stat cpx-stat--cyan">' + (en ? 'Clock' : 'کلاک') + ': <strong>5.70 GHz (0.17 ns)</strong></span>');
+        out.push('<span class="cpx-stat">' + (en ? 'Cycle' : 'سیکل') + ': <strong>#' + state.cycleCount + '</strong></span>');
+        out.push('<span class="cpx-stat">' + (en ? 'Workload' : 'سناریو') + ': <strong>' + pr.title + '</strong></span>');
       } else if (state.chapter === 'logic') {
         var ev = state.adderEval;
-        out.push('<span class="cpx-stat cpx-stat--cyan">محاسبه: <strong>' + ev.valA + ' + ' + ev.valB + ' = ' + ev.valS + '</strong></span>');
-        out.push('<span class="cpx-stat">ولتاژ منطقی: <strong>0V / 0.85V</strong></span>');
+        out.push('<span class="cpx-stat cpx-stat--cyan">' + (en ? 'Compute' : 'محاسبه') + ': <strong>' + ev.valA + ' + ' + ev.valB + ' = ' + ev.valS + '</strong></span>');
+        out.push('<span class="cpx-stat">' + (en ? 'Logic Levels' : 'ولتاژ منطقی') + ': <strong>0V / 0.85V</strong></span>');
       } else if (state.chapter === 'transistor') {
         var on = state.gateV >= state.vTh;
-        out.push('<span class="cpx-stat cpx-stat--cyan">گیت: <strong>' + state.gateV.toFixed(2) + ' V</strong></span>');
-        out.push('<span class="cpx-stat ' + (on ? '' : 'cpx-stat--hot') + '">کانال ۳nm: <strong>' + (on ? 'ON (1)' : 'OFF (0 · Quantum Leak)') + '</strong></span>');
+        out.push('<span class="cpx-stat cpx-stat--cyan">' + (en ? 'Gate' : 'گیت') + ': <strong>' + state.gateV.toFixed(2) + ' V</strong></span>');
+        out.push('<span class="cpx-stat ' + (on ? '' : 'cpx-stat--hot') + '">' + (en ? '3nm Channel' : 'کانال ۳nm') + ': <strong>' + (on ? 'ON (1)' : 'OFF (0 · Quantum Leak)') + '</strong></span>');
       } else if (state.chapter === 'thermal') {
         var ts = state.thermalStats;
-        out.push('<span class="cpx-stat cpx-stat--hot">دمای هسته: <strong>' + ts.maxT.toFixed(1) + ' °C</strong></span>');
-        out.push('<span class="cpx-stat">توان کل: <strong>' + ts.pTotal.toFixed(0) + ' W</strong></span>');
-        out.push('<span class="cpx-stat cpx-stat--cyan">فرکانس مؤثر: <strong>' + ts.effFreq.toFixed(2) + ' GHz</strong></span>');
+        out.push('<span class="cpx-stat cpx-stat--hot">' + (en ? 'Junction Temp' : 'دمای هسته') + ': <strong>' + ts.maxT.toFixed(1) + ' °C</strong></span>');
+        out.push('<span class="cpx-stat">' + (en ? 'Total Power' : 'توان کل') + ': <strong>' + ts.pTotal.toFixed(0) + ' W</strong></span>');
+        out.push('<span class="cpx-stat cpx-stat--cyan">' + (en ? 'Effective Clock' : 'فرکانس مؤثر') + ': <strong>' + ts.effFreq.toFixed(2) + ' GHz</strong></span>');
         if (ts.throttled) {
-          out.push('<span class="cpx-stat cpx-stat--throttle"><strong>محافظ PROCHOT · کاهش فرکانس</strong></span>');
+          out.push('<span class="cpx-stat cpx-stat--throttle"><strong>' + (en ? 'PROCHOT ACTIVE · THROTTLING' : 'محافظ PROCHOT · کاهش فرکانس') + '</strong></span>');
         }
       }
       var html = out.join('');
@@ -1228,7 +1478,7 @@
 
     function setChapter(id, pushUrl) {
       state.chapter = id;
-      var ch = CHAPTERS.find(function (x) { return x.id === id; }) || CHAPTERS[0];
+      var ch = getChapter(id);
       stepBtns.forEach(function (b) {
         b.setAttribute('aria-current', String(b.getAttribute('data-cpu-ch') === id));
       });
@@ -1308,13 +1558,25 @@
     var dummyM = null, tmpColor = null;
     var domCallouts = {};
 
+    function paintCalloutContent(key, co) {
+      if (!co || !co.el) return;
+      var enPair = isEn() && CALLOUTS_EN[key];
+      var lbl = enPair ? enPair[0] : co.faLabel;
+      var sub = enPair ? enPair[1] : co.faSub;
+      co.el.innerHTML = '<b>' + lbl + '</b>' + (sub ? '<em>' + sub + '</em>' : '');
+    }
+
+    function refreshCalloutLabels() {
+      Object.keys(domCallouts).forEach(function (k) { paintCalloutContent(k, domCallouts[k]); });
+    }
+
     function addCallout(key, label, sub, colorCss) {
       var el = document.createElement('span');
       el.className = 'cpx-callout';
       el.style.setProperty('--c', colorCss || '#D8A458');
-      el.innerHTML = '<b>' + label + '</b>' + (sub ? '<em>' + sub + '</em>' : '');
       labelLayer.appendChild(el);
-      domCallouts[key] = { el: el, pos: new THREE.Vector3(), visible: false, mode: null };
+      domCallouts[key] = { el: el, pos: new THREE.Vector3(), visible: false, mode: null, faLabel: label, faSub: sub || '' };
+      paintCalloutContent(key, domCallouts[key]);
       return domCallouts[key];
     }
 
@@ -2346,13 +2608,79 @@
       });
     }
 
+    var origDocTitle = document.title;
+    function applyLanguage(lang, persist) {
+      var next = (lang === 'en') ? 'en' : 'fa';
+      state.lang = next;
+      var en = (next === 'en');
+      document.documentElement.lang = next;
+      document.documentElement.dir = en ? 'ltr' : 'rtl';
+      document.title = en ? UI_EN['page.title'] : origDocTitle;
+
+      Array.prototype.slice.call(document.querySelectorAll('[data-i18n]')).forEach(function (el) {
+        if (el._faText == null) el._faText = el.textContent;
+        var k = el.getAttribute('data-i18n');
+        el.textContent = (en && UI_EN[k] != null) ? UI_EN[k] : el._faText;
+      });
+      Array.prototype.slice.call(document.querySelectorAll('[data-i18n-html]')).forEach(function (el) {
+        if (el._faHtml == null) el._faHtml = el.innerHTML;
+        var k = el.getAttribute('data-i18n-html');
+        el.innerHTML = (en && UI_EN[k] != null) ? UI_EN[k] : el._faHtml;
+      });
+
+      Array.prototype.slice.call(document.querySelectorAll('[data-cpu-lang]')).forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-cpu-lang') === next));
+      });
+      Array.prototype.slice.call(document.querySelectorAll('[data-cpu-lang-toggle]')).forEach(function (btn) {
+        var sp = btn.querySelector('span');
+        if (sp) sp.textContent = en ? 'فا' : 'EN';
+        btn.title = en ? 'Switch to Persian (فارسی)' : 'Switch to English';
+      });
+
+      refreshCalloutLabels();
+      var ch = getChapter(state.chapter);
+      if (storyEl) storyEl.innerHTML = ch.story;
+      if (state.selectedTile) openInspector(state.selectedTile);
+      paintSystemPanel();
+      paintAdderPanel();
+      paintTransistorPanel();
+      paintThermalPanel();
+      paintPlay();
+      paintDockBtn();
+      paintFull();
+      lastHudHtml = '';
+      paintMetricsHUD();
+
+      if (persist) {
+        try { localStorage.setItem('nvx_cpu_lang', next); } catch (_) {}
+        try {
+          var u = new URL(location.href);
+          u.searchParams.set('lang', next);
+          history.replaceState(null, '', u);
+        } catch (_) {}
+      }
+    }
+
+    Array.prototype.slice.call(document.querySelectorAll('[data-cpu-lang]')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        applyLanguage(btn.getAttribute('data-cpu-lang'), true);
+      });
+    });
+    Array.prototype.slice.call(document.querySelectorAll('[data-cpu-lang-toggle]')).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        applyLanguage(isEn() ? 'fa' : 'en', true);
+      });
+    });
+
     function boot() {
       if (state.ready || state.dead) return;
       if (!hasWebGL()) {
         state.dead = true;
         if (noteOverlay) {
           noteOverlay.hidden = false;
-          noteOverlay.innerHTML = '<b>این آزمایشگاه سه‌بعدی به WebGL نیاز دارد</b>مرورگر شما WebGL را فعال نکرده؛ شرح کامل مهندسی، معادلات و پرسش‌های پرتکرار پایین همین صفحه موجود است.';
+          noteOverlay.innerHTML = isEn()
+            ? '<b>This 3D laboratory requires WebGL</b>WebGL is disabled in your browser; the complete engineering guide, equations, and references are available below.'
+            : '<b>این آزمایشگاه سه‌بعدی به WebGL نیاز دارد</b>مرورگر شما WebGL را فعال نکرده؛ شرح کامل مهندسی، معادلات و پرسش‌های پرتکرار پایین همین صفحه موجود است.';
         }
         return;
       }
@@ -2404,12 +2732,11 @@
     else global.addEventListener('resize', onResize);
 
     syncSliders();
-    paintSystemPanel();
-    paintAdderPanel();
-    paintTransistorPanel();
+    applyLanguage(state.lang, false);
     setChapter(state.chapter, false);
 
     var api = {
+      setLang: applyLanguage,
       setChapter: setChapter,
       openInspector: openInspector,
       closeInspector: closeInspector,

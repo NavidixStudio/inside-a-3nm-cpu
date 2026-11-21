@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr" data-default-lang="en">
 <head>
+<script>(function(){try{var u=new URL(location.href),q=(u.searchParams.get('lang')||'').toLowerCase(),s=localStorage.getItem('nvx_cpu_lang'),d=document.documentElement.getAttribute('data-default-lang')||'fa',l=(q==='en'||q==='fa')?q:((s==='en'||s==='fa')?s:d);document.documentElement.lang=l;document.documentElement.dir=(l==='en'?'ltr':'rtl');}catch(_){}})();</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>درون یک پردازنده‌ی ۳ نانومتری | Inside a 3nm CPU — کالبدشکافی سه‌بعدی اولترا ۹، ترانزیستور GAA و فیزیک حرارت | نویدیکس</title>
@@ -32,9 +33,9 @@
 <meta name="twitter:title" content="درون یک پردازنده‌ی ۳ نانومتری — آزمایشگاه سه‌بعدی اولترا ۹ | نویدیکس" />
 <meta name="twitter:description" content="کلاهک فلزی پردازنده‌ی اولترا ۹ را بردار، از مقیاس چیپلت و گذرگاه‌های DDR5/PCIe تا ترانزیستور اتمی ۳nm GAA و دوربین حرارتی زنده FLIR سفر کن." />
 <meta name="twitter:image" content="https://navidixstudio.com/og-home.png" />
-<link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="192x192" href="/navidix-icon-192.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" href="https://navidixstudio.com/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="https://navidixstudio.com/navidix-icon-192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://navidixstudio.com/apple-touch-icon.png" />
 <style>
 @font-face{font-family:'Navidix Serif';src:url('./assets/fonts/source-serif-4-latin.woff2')format('woff2');font-weight:200 900;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-200B,U+2010-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:'Navidix Serif';src:url('./assets/fonts/source-serif-4-latin-italic.woff2')format('woff2');font-weight:200 900;font-style:italic;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-200B,U+2010-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -157,14 +158,20 @@
 
 <header class="xbar"><div class="xbar__row">
   <a class="xbar__home" href="https://navidixstudio.com/"><img src="./assets/navidix-wordmark.webp" alt="NAVIDIX" width="104" height="16" /></a>
-  <a href="https://navidixstudio.com/explore/">پلتفرم علمی تعاملی ←</a>
+  <div class="xbar__actions">
+    <div class="cpu-lang-switch" role="group" aria-label="Language switch">
+      <button type="button" class="cpu-lang-btn" data-cpu-lang="en" aria-pressed="false">EN</button>
+      <button type="button" class="cpu-lang-btn" data-cpu-lang="fa" aria-pressed="true">فا</button>
+    </div>
+    <a href="https://navidixstudio.com/explore/" data-i18n="nav.explore">پلتفرم علمی تعاملی ←</a>
+  </div>
 </div></header>
 
-<nav class="crumb" aria-label="مسیر صفحه">
+<nav class="crumb" aria-label="Breadcrumb">
   <ol>
-    <li><a href="https://navidixstudio.com/">نویدیکس</a></li>
-    <li><a href="https://navidixstudio.com/explore/">پلتفرم علمی تعاملی</a></li>
-    <li><span aria-current="page">درون یک پردازنده‌ی ۳ نانومتری</span></li>
+    <li><a href="https://navidixstudio.com/" data-i18n="crumb.home">نویدیکس</a></li>
+    <li><a href="https://navidixstudio.com/explore/" data-i18n="crumb.explore">پلتفرم علمی تعاملی</a></li>
+    <li><span aria-current="page" data-i18n="crumb.cur">درون یک پردازنده‌ی ۳ نانومتری</span></li>
   </ol>
 </nav>
 
@@ -174,71 +181,78 @@
   <div class="xhero__field" aria-hidden="true"></div>
   <div class="xwrap xhero__in">
     <div class="cpu-hero-meta xin">
-      <span class="cpu-tag cpu-tag--red">تجربه‌ی ۰۷ · آزمایشگاه مهندسی سخت‌افزار</span>
-      <span class="cpu-tag">معماری ۳ نانومتری اولترا ۹ · Foveros 3D</span>
+      <span class="cpu-tag cpu-tag--red" data-i18n="hero.tag1">تجربه‌ی ۰۷ · آزمایشگاه مهندسی سخت‌افزار</span>
+      <span class="cpu-tag" data-i18n="hero.tag2">معماری ۳ نانومتری اولترا ۹ · Foveros 3D</span>
       <span class="cpu-tag cpu-tag--mono">45mm → 3nm · 15,000,000× ZOOM · FLIR PDE</span>
+      <div class="cpu-lang-switch" role="group" aria-label="Language switch">
+        <button type="button" class="cpu-lang-btn" data-cpu-lang="en" aria-pressed="false">EN</button>
+        <button type="button" class="cpu-lang-btn" data-cpu-lang="fa" aria-pressed="true">فا</button>
+      </div>
     </div>
-    <h1 class="xin xin--2">درون یک پردازنده‌ی ۳ نانومتری<span class="xhero__en">Inside a 3nm CPU — From Silicon Package to Quantum Gate</span></h1>
-    <p class="xhero__lede xin xin--3">زیر یک مربع فلزیِ بی‌صدا به اندازه‌ی کف دست، <b>حدود ۱۸ میلیارد کلیدِ اتمی</b> ۵٫۷ میلیارد بار در ثانیه باز و بسته می‌شوند. کلاهک تیتانیومیِ پردازنده‌ی رده‌بالای <b>اولترا ۹</b> را بردار، از مقیاس چیپلت‌های سه‌بعدی و گذرگاه‌های DDR5 و PCIe 5.0 تا مدار واقعی صفر و یک، کانال ۱۵ اتمی ترانزیستور <b>3nm GAA</b> و دوربین حرارتی زنده <b>FLIR</b> شیرجه بزن — تا یک‌بار برای همیشه ببینی یک تکه شنِ خالص چطور کل کامپیوتر را فرماندهی می‌کند و <b>چرا داغ می‌شود.</b></p>
+    <h1 class="xin xin--2" data-i18n-html="hero.h1">درون یک پردازنده‌ی ۳ نانومتری<span class="xhero__en">Inside a 3nm CPU — From Silicon Package to Quantum Gate</span></h1>
+    <p class="xhero__lede xin xin--3" data-i18n-html="hero.lede">زیر یک مربع فلزیِ بی‌صدا به اندازه‌ی کف دست، <b>حدود ۱۸ میلیارد کلیدِ اتمی</b> ۵٫۷ میلیارد بار در ثانیه باز و بسته می‌شوند. کلاهک تیتانیومیِ پردازنده‌ی رده‌بالای <b>اولترا ۹</b> را بردار، از مقیاس چیپلت‌های سه‌بعدی و گذرگاه‌های DDR5 و PCIe 5.0 تا مدار واقعی صفر و یک، کانال ۱۵ اتمی ترانزیستور <b>3nm GAA</b> و دوربین حرارتی زنده <b>FLIR</b> شیرجه بزن — تا یک‌بار برای همیشه ببینی یک تکه شنِ خالص چطور کل کامپیوتر را فرماندهی می‌کند و <b>چرا داغ می‌شود.</b></p>
     <hr class="xrule xin xin--3" />
     <div class="cpu-hero-actions xin xin--3">
       <a class="xbtn xbtn--go" href="#stage">
-        <span>باز کردن آزمایشگاه سه‌بعدی</span>
+        <span data-i18n="hero.cta1">باز کردن آزمایشگاه سه‌بعدی</span>
         <svg class="xbtn__ind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14M12 6l6 6-6 6"/></svg>
       </a>
       <a class="xbtn" href="#science">
-        <span>تحلیل مهندسی و معادلات حرارتی</span>
+        <span data-i18n="hero.cta2">تحلیل مهندسی و معادلات حرارتی</span>
       </a>
     </div>
   </div>
 </section>
 
-<section class="xwrap xp" id="stage" aria-label="آزمایشگاه سه‌بعدی درون یک پردازنده‌ی ۳ نانومتری">
-  <p class="xp__q">چطور فقط <b>صفر و یکِ الکتریکی</b> هم‌زمان بازی 4K، هوش مصنوعی، RAM و نمایشگر را بدون کوچک‌ترین تداخلی هماهنگ می‌کند — و چرا با کمی بالا بردن ولتاژ، دمای تراشه منفجر می‌شود؟ <b>روی لایه‌های سیلیکون زوم کن و خودت آزمایش کن.</b></p>
+<section class="xwrap xp" id="stage" aria-label="Inside a 3nm CPU 3D Laboratory">
+  <p class="xp__q" data-i18n-html="stage.q">چطور فقط <b>صفر و یکِ الکتریکی</b> هم‌زمان بازی 4K، هوش مصنوعی، RAM و نمایشگر را بدون کوچک‌ترین تداخلی هماهنگ می‌کند — و چرا با کمی بالا بردن ولتاژ، دمای تراشه منفجر می‌شود؟ <b>روی لایه‌های سیلیکون زوم کن و خودت آزمایش کن.</b></p>
 
   <div class="cpx-fs">
 
     <!-- 1. Five True Physical Scales Rail (45 mm -> 3 nm -> FLIR °C) -->
-    <nav class="cpx-rail" aria-label="پنج مقیاس فیزیکی پردازنده">
+    <nav class="cpx-rail" aria-label="Five CPU Physical Scales">
       <button type="button" class="cpx-step" data-cpu-ch="package" aria-current="true">
-        <span class="cpx-step__top"><span class="cpx-step__no">۰۱</span><span class="cpx-step__scale">45 mm</span></span>
-        <span class="cpx-step__title">کالبدشکافی اولترا ۹</span>
+        <span class="cpx-step__top"><span class="cpx-step__no" data-i18n="step.1.no">۰۱</span><span class="cpx-step__scale">45 mm</span></span>
+        <span class="cpx-step__title" data-i18n="step.1.t">کالبدشکافی اولترا ۹</span>
       </button>
       <button type="button" class="cpx-step" data-cpu-ch="system" aria-current="false">
-        <span class="cpx-step__top"><span class="cpx-step__no">۰۲</span><span class="cpx-step__scale">2 mm</span></span>
-        <span class="cpx-step__title">فرماندهی کل سیستم</span>
+        <span class="cpx-step__top"><span class="cpx-step__no" data-i18n="step.2.no">۰۲</span><span class="cpx-step__scale">2 mm</span></span>
+        <span class="cpx-step__title" data-i18n="step.2.t">فرماندهی کل سیستم</span>
       </button>
       <button type="button" class="cpx-step" data-cpu-ch="logic" aria-current="false">
-        <span class="cpx-step__top"><span class="cpx-step__no">۰۳</span><span class="cpx-step__scale">100 nm</span></span>
-        <span class="cpx-step__title">منطق صفر و یک (ALU)</span>
+        <span class="cpx-step__top"><span class="cpx-step__no" data-i18n="step.3.no">۰۳</span><span class="cpx-step__scale">100 nm</span></span>
+        <span class="cpx-step__title" data-i18n="step.3.t">منطق صفر و یک (ALU)</span>
       </button>
       <button type="button" class="cpx-step" data-cpu-ch="transistor" aria-current="false">
-        <span class="cpx-step__top"><span class="cpx-step__no">۰۴</span><span class="cpx-step__scale">3 nm</span></span>
-        <span class="cpx-step__title">ترانزیستور اتمی GAA</span>
+        <span class="cpx-step__top"><span class="cpx-step__no" data-i18n="step.4.no">۰۴</span><span class="cpx-step__scale">3 nm</span></span>
+        <span class="cpx-step__title" data-i18n="step.4.t">ترانزیستور اتمی GAA</span>
       </button>
       <button type="button" class="cpx-step" data-cpu-ch="thermal" aria-current="false">
-        <span class="cpx-step__top"><span class="cpx-step__no">۰۵</span><span class="cpx-step__scale">FLIR °C</span></span>
-        <span class="cpx-step__title">چرا CPU داغ می‌شود؟</span>
+        <span class="cpx-step__top"><span class="cpx-step__no" data-i18n="step.5.no">۰۵</span><span class="cpx-step__scale">FLIR °C</span></span>
+        <span class="cpx-step__title" data-i18n="step.5.t">چرا CPU داغ می‌شود؟</span>
       </button>
     </nav>
 
     <!-- 2. The 3D Photorealistic Hardware Observatory -->
     <div class="cpx-stage">
-      <canvas class="cpx-canvas" role="img" aria-label="شبیه‌ساز تعاملی سه‌بعدی پردازنده‌ی ۳ نانومتری اولترا ۹ در پنج مقیاس فیزیکی: چیپلت سه‌بعدی، گذرگاه سیستم، جمع‌کننده‌ی ۴بیتی، ترانزیستور GAA و دوربین حرارتی FLIR"></canvas>
+      <canvas class="cpx-canvas" role="img" aria-label="Interactive 3D simulator of a 3nm Ultra 9 processor across 5 physical scales: Foveros 3D chiplets, system bus, 4-bit adder, GAA transistor, and live FLIR thermal camera"></canvas>
 
       <!-- Floating Top Telemetry + Hardware Stage Controls -->
       <div class="cpx-hud-top">
         <div class="cpx-hud-metrics" data-cpu-metrics aria-live="polite"></div>
         <div class="cpx-stage-tools">
-          <button type="button" class="cpx-tool cpx-tool--dock" data-cpu-dock aria-pressed="false" title="مخفی یا نمایش پنل مهندسی در تمام‌صفحه">
+          <button type="button" class="cpx-tool cpx-tool--lang" data-cpu-lang-toggle title="Switch language (EN / FA)">
+            <span>EN</span>
+          </button>
+          <button type="button" class="cpx-tool cpx-tool--dock" data-cpu-dock aria-pressed="false" title="Toggle engineering panel in fullscreen">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14h18"/></svg>
             <span>مخفی‌کردن پنل</span>
           </button>
-          <button type="button" class="cpx-tool" data-cpu-orbit aria-pressed="true" title="چرخش خودکار دوربین">
+          <button type="button" class="cpx-tool" data-cpu-orbit aria-pressed="true" title="Toggle auto camera orbit">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-            <span>چرخش</span>
+            <span data-i18n="tool.orbit">چرخش</span>
           </button>
-          <button type="button" class="cpx-tool cpx-tool--fs" data-cpu-fs aria-pressed="false" title="حالت تمام‌صفحه (کلید F)">
+          <button type="button" class="cpx-tool cpx-tool--fs" data-cpu-fs aria-pressed="false" title="Fullscreen (F)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/></svg>
             <span>تمام‌صفحه</span>
           </button>
@@ -249,16 +263,16 @@
       <div class="cpx-labels" aria-hidden="true"></div>
 
       <!-- Authentic Ironbow FLIR Legend (Chapter 05 Only) -->
-      <div class="cpx-flir-bar" data-cpu-flir-bar hidden aria-label="مقیاس دمای دوربین حرارتی FLIR">
+      <div class="cpx-flir-bar" data-cpu-flir-bar hidden aria-label="FLIR Thermal Temperature Scale">
         <span>28°C</span>
         <span class="cpx-flir-grad" aria-hidden="true"></span>
         <span>104°C</span>
       </div>
 
       <!-- Click-to-Inspect Silicon Chiplet HUD -->
-      <aside class="cpx-inspector" data-cpu-inspector hidden aria-label="مشخصات فنی تایل سیلیکونی"></aside>
+      <aside class="cpx-inspector" data-cpu-inspector hidden aria-label="Silicon Tile Specifications"></aside>
 
-      <p class="cpx-hint">بکش برای چرخش سه‌بعدی · اسکرول برای بزرگ‌نمایی · کلیک روی هر تایل سیلیکونی · کلید F برای تمام‌صفحه</p>
+      <p class="cpx-hint" data-i18n="stage.hint">بکش برای چرخش سه‌بعدی · اسکرول برای بزرگ‌نمایی · کلیک روی هر تایل سیلیکونی · کلید F برای تمام‌صفحه</p>
       <div class="xstage__note" hidden></div>
     </div>
 
@@ -269,13 +283,13 @@
       <!-- PANEL 01: 45mm Package & Foveros 3D Chiplets -->
       <div class="cpx-panel" data-cpu-panel="package">
         <div class="cpx-panel__head">
-          <h3 class="cpx-panel__title">باز کردن لایه‌های پکیج سه‌بعدی <span class="cpx-panel__code">LGA-1851 · Foveros 3D</span></h3>
-          <button type="button" class="cpx-pill" data-cpu-xray aria-pressed="false">نمای اشعه‌ی ایکس کلاهک (X-Ray IHS)</button>
+          <h3 class="cpx-panel__title" data-i18n-html="p1.title">باز کردن لایه‌های پکیج سه‌بعدی <span class="cpx-panel__code">LGA-1851 · Foveros 3D</span></h3>
+          <button type="button" class="cpx-pill" data-cpu-xray aria-pressed="false" data-i18n="p1.xray">نمای اشعه‌ی ایکس کلاهک (X-Ray IHS)</button>
         </div>
         <div class="cpx-sliders">
           <div class="cpx-sl-card">
             <div class="cpx-sl-top">
-              <label class="cpx-sl-label" for="cpu-sl-explode">جداسازی عمودی لایه‌ها (Delid / Explode)</label>
+              <label class="cpx-sl-label" for="cpu-sl-explode" data-i18n="p1.sl">جداسازی عمودی لایه‌ها (Delid / Explode)</label>
               <span class="cpx-sl-val" data-cpu-val="explode">65%</span>
             </div>
             <input id="cpu-sl-explode" type="range" min="0" max="1" step="0.01" value="0.65" data-cpu-sl="explode" />
@@ -286,23 +300,23 @@
       <!-- PANEL 02: System Orchestration & 5-Stage Pipeline -->
       <div class="cpx-panel" data-cpu-panel="system" hidden>
         <div class="cpx-panel__head">
-          <h3 class="cpx-panel__title">فرماندهی کل سیستم و خط لوله‌ی ۵ مرحله‌ای <span class="cpx-panel__code">5-Stage Superscalar Pipeline</span></h3>
+          <h3 class="cpx-panel__title" data-i18n-html="p2.title">فرماندهی کل سیستم و خط لوله‌ی ۵ مرحله‌ای <span class="cpx-panel__code">5-Stage Superscalar Pipeline</span></h3>
           <div class="cpx-bar__group">
-            <button type="button" class="cpx-pill" data-cpu-stepclk title="اجرای یک پالس کلاک به صورت دستی (کلید S)">+۱ پالس کلاک (Step)</button>
-            <button type="button" class="cpx-pill" data-cpu-autoclk aria-pressed="true">کلاک خودکار</button>
+            <button type="button" class="cpx-pill" data-cpu-stepclk title="Step 1 clock pulse manually (S)" data-i18n="p2.step">+۱ پالس کلاک (Step)</button>
+            <button type="button" class="cpx-pill" data-cpu-autoclk aria-pressed="true" data-i18n="p2.auto">کلاک خودکار</button>
           </div>
         </div>
-        <div class="cpx-pills" role="group" aria-label="انتخاب سناریوی سیستم">
-          <button type="button" class="cpx-pill" data-cpu-prog="game" aria-pressed="true">رندر فریم بازی 4K</button>
-          <button type="button" class="cpx-pill" data-cpu-prog="ai" aria-pressed="false">استنتاج هوش مصنوعی (ماتریس)</button>
-          <button type="button" class="cpx-pill" data-cpu-prog="browser" aria-pressed="false">باز کردن تب مرورگر و وب</button>
+        <div class="cpx-pills" role="group" aria-label="Workload presets">
+          <button type="button" class="cpx-pill" data-cpu-prog="game" aria-pressed="true" data-i18n="p2.game">رندر فریم بازی 4K</button>
+          <button type="button" class="cpx-pill" data-cpu-prog="ai" aria-pressed="false" data-i18n="p2.ai">استنتاج هوش مصنوعی (ماتریس)</button>
+          <button type="button" class="cpx-pill" data-cpu-prog="browser" aria-pressed="false" data-i18n="p2.browser">باز کردن تب مرورگر و وب</button>
         </div>
-        <div class="cpx-pipe-stages" aria-label="پنج مرحله خط لوله دستورالعمل">
-          <div class="cpx-pstage is-now" data-cpu-pstage><small>01 · FETCH</small><b>واکشی از حافظه</b></div>
-          <div class="cpx-pstage" data-cpu-pstage><small>02 · DECODE</small><b>رمزگشایی باینری</b></div>
-          <div class="cpx-pstage" data-cpu-pstage><small>03 · EXECUTE</small><b>محاسبه در ALU</b></div>
-          <div class="cpx-pstage" data-cpu-pstage><small>04 · MEMORY</small><b>تراکنش RAM / PCIe</b></div>
-          <div class="cpx-pstage" data-cpu-pstage><small>05 · WRITEBACK</small><b>ثبت در رجیستر</b></div>
+        <div class="cpx-pipe-stages" aria-label="5-stage instruction pipeline">
+          <div class="cpx-pstage is-now" data-cpu-pstage><small>01 · FETCH</small><b data-i18n="p2.s1">واکشی از حافظه</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>02 · DECODE</small><b data-i18n="p2.s2">رمزگشایی باینری</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>03 · EXECUTE</small><b data-i18n="p2.s3">محاسبه در ALU</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>04 · MEMORY</small><b data-i18n="p2.s4">تراکنش RAM / PCIe</b></div>
+          <div class="cpx-pstage" data-cpu-pstage><small>05 · WRITEBACK</small><b data-i18n="p2.s5">ثبت در رجیستر</b></div>
         </div>
         <div class="cpx-bus-strip">
           <span class="cpx-asm" data-cpu-asm>LD  R1, [DDR5:0x8F40]   ·   RAM → L3 (68 ns)</span>
@@ -314,11 +328,11 @@
       <!-- PANEL 03: Real Interactive 4-Bit Boolean Ripple-Carry Adder -->
       <div class="cpx-panel" data-cpu-panel="logic" hidden>
         <div class="cpx-panel__head">
-          <h3 class="cpx-panel__title">جمع‌کننده‌ی سخت‌افزاری ۴بیتی روی سیلیکون <span class="cpx-panel__code">4-Bit Ripple-Carry Full Adder</span></h3>
+          <h3 class="cpx-panel__title" data-i18n-html="p3.title">جمع‌کننده‌ی سخت‌افزاری ۴بیتی روی سیلیکون <span class="cpx-panel__code">4-Bit Ripple-Carry Full Adder</span></h3>
         </div>
         <div class="cpx-bin-grid">
           <div class="cpx-dip-group">
-            <div class="cpx-dip-head"><span>ورودی A (کلیک برای تغییر بیت)</span><b data-cpu-dec-a>5 (0101)</b></div>
+            <div class="cpx-dip-head"><span data-i18n="p3.ina">ورودی A (کلیک برای تغییر بیت)</span><b data-cpu-dec-a>5 (0101)</b></div>
             <div class="cpx-dip-row">
               <button type="button" class="cpx-bit" data-cpu-bit="A:3" aria-pressed="false"><span>0</span><small>8</small></button>
               <button type="button" class="cpx-bit" data-cpu-bit="A:2" aria-pressed="true"><span>1</span><small>4</small></button>
@@ -327,7 +341,7 @@
             </div>
           </div>
           <div class="cpx-dip-group">
-            <div class="cpx-dip-head"><span>ورودی B (کلیک برای تغییر بیت)</span><b data-cpu-dec-b>3 (0011)</b></div>
+            <div class="cpx-dip-head"><span data-i18n="p3.inb">ورودی B (کلیک برای تغییر بیت)</span><b data-cpu-dec-b>3 (0011)</b></div>
             <div class="cpx-dip-row">
               <button type="button" class="cpx-bit" data-cpu-bit="B:3" aria-pressed="false"><span>0</span><small>8</small></button>
               <button type="button" class="cpx-bit" data-cpu-bit="B:2" aria-pressed="false"><span>0</span><small>4</small></button>
@@ -336,7 +350,7 @@
             </div>
           </div>
           <div class="cpx-sum-box">
-            <small>حاصل جمع دقیق روی سیم‌های مسی</small>
+            <small data-i18n="p3.sumlbl">حاصل جمع دقیق روی سیم‌های مسی</small>
             <div class="cpx-sum-dec" data-cpu-sum-dec>5 + 3 = 8</div>
             <div class="cpx-sum-bits" data-cpu-sum-bits>01000</div>
           </div>
@@ -346,64 +360,64 @@
       <!-- PANEL 04: 3nm GAA / RibbonFET Nanosheet Transistor -->
       <div class="cpx-panel" data-cpu-panel="transistor" hidden>
         <div class="cpx-panel__head">
-          <h3 class="cpx-panel__title">کنترل گیت ۴طرفه‌ی ترانزیستور ۳ نانومتری <span class="cpx-panel__code">GAA RibbonFET · V_th = 0.32 V</span></h3>
+          <h3 class="cpx-panel__title" data-i18n-html="p4.title">کنترل گیت ۴طرفه‌ی ترانزیستور ۳ نانومتری <span class="cpx-panel__code">GAA RibbonFET · V_th = 0.32 V</span></h3>
         </div>
-        <div class="cpx-pills" role="group" aria-label="پیش‌تنظیم ولتاژ گیت">
-          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.10">خاموش ۰٫۱۰V (نشت کوانتومی)</button>
-          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.32">آستانه‌ی روشن‌شدن ۰٫۳۲V</button>
-          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.85">روشن کامل ۰٫۸۵V (منطقی ۱)</button>
+        <div class="cpx-pills" role="group" aria-label="Gate voltage presets">
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.10" data-i18n="p4.pr1">خاموش ۰٫۱۰V (نشت کوانتومی)</button>
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.32" data-i18n="p4.pr2">آستانه‌ی روشن‌شدن ۰٫۳۲V</button>
+          <button type="button" class="cpx-pill" data-cpu-gate-preset="0.85" data-i18n="p4.pr3">روشن کامل ۰٫۸۵V (منطقی ۱)</button>
         </div>
         <div class="cpx-sliders">
           <div class="cpx-sl-card">
             <div class="cpx-sl-top">
-              <label class="cpx-sl-label" for="cpu-sl-gate">ولتاژ گیت فلزی (V_GS)</label>
+              <label class="cpx-sl-label" for="cpu-sl-gate" data-i18n="p4.sl">ولتاژ گیت فلزی (V_GS)</label>
               <span class="cpx-sl-val" data-cpu-val="gate">0.72 V</span>
             </div>
             <input id="cpu-sl-gate" type="range" min="0" max="1" step="0.01" value="0.72" data-cpu-sl="gate" />
           </div>
         </div>
         <div class="cpx-readout-strip">
-          <div class="cpx-meter"><span>وضعیت منطقی کلید</span><b data-cpu-mos-state>ON — منطقی 1</b></div>
-          <div class="cpx-meter"><span>جریان کانال (I_DS)</span><b data-cpu-mos-cur>101 µA</b></div>
-          <div class="cpx-meter"><span>نشت زیرآستانه</span><b data-cpu-mos-leak>38.4 nA (تونل‌زنی کوانتومی)</b></div>
-          <div class="cpx-meter"><span>لرزش کریستال (فونون)</span><b data-cpu-mos-ph>بالا (تولید حرارت ژول)</b></div>
+          <div class="cpx-meter"><span data-i18n="p4.m1">وضعیت منطقی کلید</span><b data-cpu-mos-state>ON — منطقی 1</b></div>
+          <div class="cpx-meter"><span data-i18n="p4.m2">جریان کانال (I_DS)</span><b data-cpu-mos-cur>101 µA</b></div>
+          <div class="cpx-meter"><span data-i18n="p4.m3">نشت زیرآستانه</span><b data-cpu-mos-leak>38.4 nA (تونل‌زنی کوانتومی)</b></div>
+          <div class="cpx-meter"><span data-i18n="p4.m4">لرزش کریستال (فونون)</span><b data-cpu-mos-ph>بالا (تولید حرارت ژول)</b></div>
         </div>
       </div>
 
       <!-- PANEL 05: Live 2D PDE Thermodynamics & FLIR Heat Map -->
       <div class="cpx-panel" data-cpu-panel="thermal" hidden>
         <div class="cpx-panel__head">
-          <h3 class="cpx-panel__title">شبیه‌ساز زنده‌ی معادله‌ی گرما و دوربین FLIR <span class="cpx-panel__code">P = α·C·V²·f + I_leak(T)·V</span></h3>
+          <h3 class="cpx-panel__title" data-i18n-html="p5.title">شبیه‌ساز زنده‌ی معادله‌ی گرما و دوربین FLIR <span class="cpx-panel__code">P = α·C·V²·f + I_leak(T)·V</span></h3>
         </div>
-        <div class="cpx-pills" role="group" aria-label="بار کاری و نوع خنک‌کننده">
-          <button type="button" class="cpx-pill" data-cpu-wl="idle" aria-pressed="false">بیکاری (Idle)</button>
-          <button type="button" class="cpx-pill" data-cpu-wl="gaming" aria-pressed="false">بازی 4K (Gaming)</button>
-          <button type="button" class="cpx-pill" data-cpu-wl="render" aria-pressed="true">رندر سنگین ۲۴ هسته</button>
-          <button type="button" class="cpx-pill" data-cpu-cool="aio360" aria-pressed="true">خنک‌کننده‌ی مایع 360mm</button>
-          <button type="button" class="cpx-pill" data-cpu-cool="air" aria-pressed="false">خنک‌کننده‌ی بادی</button>
-          <button type="button" class="cpx-pill" data-cpu-cool="none" aria-pressed="false">بدون خنک‌کننده (تست بحرانی)</button>
+        <div class="cpx-pills" role="group" aria-label="Workload and cooler presets">
+          <button type="button" class="cpx-pill" data-cpu-wl="idle" aria-pressed="false" data-i18n="p5.wl1">بیکاری (Idle)</button>
+          <button type="button" class="cpx-pill" data-cpu-wl="gaming" aria-pressed="false" data-i18n="p5.wl2">بازی 4K (Gaming)</button>
+          <button type="button" class="cpx-pill" data-cpu-wl="render" aria-pressed="true" data-i18n="p5.wl3">رندر سنگین ۲۴ هسته</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="aio360" aria-pressed="true" data-i18n="p5.c1">خنک‌کننده‌ی مایع 360mm</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="air" aria-pressed="false" data-i18n="p5.c2">خنک‌کننده‌ی بادی</button>
+          <button type="button" class="cpx-pill" data-cpu-cool="none" aria-pressed="false" data-i18n="p5.c3">بدون خنک‌کننده (تست بحرانی)</button>
         </div>
         <div class="cpx-sliders">
           <div class="cpx-sl-card">
             <div class="cpx-sl-top">
-              <label class="cpx-sl-label" for="cpu-sl-freq">فرکانس کلاک (f · توان ۱)</label>
+              <label class="cpx-sl-label" for="cpu-sl-freq" data-i18n="p5.slf">فرکانس کلاک (f · توان ۱)</label>
               <span class="cpx-sl-val" data-cpu-val="freq">5.20 GHz</span>
             </div>
             <input id="cpu-sl-freq" type="range" min="1.5" max="6.0" step="0.1" value="5.2" data-cpu-sl="freq" />
           </div>
           <div class="cpx-sl-card">
             <div class="cpx-sl-top">
-              <label class="cpx-sl-label" for="cpu-sl-volt">ولتاژ هسته (V · ضربدر مربع V²!)</label>
+              <label class="cpx-sl-label" for="cpu-sl-volt" data-i18n="p5.slv">ولتاژ هسته (V · ضربدر مربع V²!)</label>
               <span class="cpx-sl-val" data-cpu-val="volt">1.18 V</span>
             </div>
             <input id="cpu-sl-volt" type="range" min="0.65" max="1.45" step="0.01" value="1.18" data-cpu-sl="volt" />
           </div>
         </div>
         <div class="cpx-readout-strip">
-          <div class="cpx-meter"><span>توان دینامیکی (αCV²f)</span><b data-cpu-pdyn>165.1 W</b></div>
-          <div class="cpx-meter"><span>توان نشت کوانتومی</span><b data-cpu-pleak>20.2 W</b></div>
-          <div class="cpx-meter"><span>کل حرارت تولیدی (TDP)</span><b data-cpu-ptot>185.3 W</b></div>
-          <div class="cpx-meter"><span>دمای داغ‌ترین هسته (Tj)</span><b data-cpu-tj>74.0 °C</b></div>
+          <div class="cpx-meter"><span data-i18n="p5.m1">توان دینامیکی (αCV²f)</span><b data-cpu-pdyn>165.1 W</b></div>
+          <div class="cpx-meter"><span data-i18n="p5.m2">توان نشت کوانتومی</span><b data-cpu-pleak>20.2 W</b></div>
+          <div class="cpx-meter"><span data-i18n="p5.m3">کل حرارت تولیدی (TDP)</span><b data-cpu-ptot>185.3 W</b></div>
+          <div class="cpx-meter"><span data-i18n="p5.m4">دمای داغ‌ترین هسته (Tj)</span><b data-cpu-tj>74.0 °C</b></div>
         </div>
       </div>
 
@@ -411,7 +425,7 @@
       <div class="cpx-bar">
         <div class="cpx-bar__group">
           <button type="button" class="xbtn xbtn--go" data-cpu-play aria-pressed="true"><span>توقف</span></button>
-          <button type="button" class="xbtn" data-cpu-reset>بازنشانی همه مقیاس‌ها</button>
+          <button type="button" class="xbtn" data-cpu-reset data-i18n="bar.reset">بازنشانی همه مقیاس‌ها</button>
         </div>
         <div class="cpx-bar__group">
           <button type="button" class="xbtn" data-cpu-fs aria-pressed="false"><span>حالت تمام‌صفحه</span></button>
@@ -422,7 +436,8 @@
   </div>
 </section>
 
-<section class="xwrap xdoc" id="science" aria-label="تحلیل مهندسی و علمی درون پردازنده‌ی ۳ نانومتری">
+<div id="science">
+<section class="xwrap xdoc" data-lang-block="fa" aria-label="تحلیل مهندسی و علمی درون پردازنده‌ی ۳ نانومتری">
 
   <header class="xdoc__head">
     <p class="xdoc__eyebrow">ENGINEERING DEEP DIVE · تحلیل مهندسی و فیزیک نیمه‌هادی</p>
@@ -649,17 +664,180 @@
   </div>
 </section>
 
-<nav class="xwrap" aria-label="تجربه‌های دیگر">
+<!-- ENGLISH ENGINEERING DEEP DIVE (shown when lang="en") -->
+<section class="xwrap xdoc" data-lang-block="en" aria-label="Engineering Deep Dive — Inside a 3nm CPU">
+
+  <header class="xdoc__head">
+    <p class="xdoc__eyebrow">ENGINEERING DEEP DIVE · SEMICONDUCTOR &amp; THERMAL PHYSICS</p>
+    <h2 class="xdoc__title">From Disaggregated 3D Chiplets to Quantum Tunneling &amp; CMOS Heat</h2>
+    <p class="xdoc__sub">Everything happening beneath the brushed metal lid of a modern 3nm flagship processor — real equations, architectural tradeoffs, and hands-on experiments you can test directly in the 3D WebGL observatory above.</p>
+
+    <div class="xdoc__kpis" aria-label="Reference Ultra 9 Architecture Metrics">
+      <div class="xdoc__kpi">
+        <small>Compute Tile Process Node</small>
+        <b>3 nm GAA</b>
+        <span>360° Gate-All-Around Nanosheets (RibbonFET)</span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>Hybrid Core Topology</small>
+        <b>24 Cores</b>
+        <span>8 High-IPC P-Cores + 16 Throughput E-Cores</span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>Silicon Switch Density</small>
+        <b>~18 Billion</b>
+        <span>Across 4 disaggregated Foveros 3D chiplets</span>
+      </div>
+      <div class="xdoc__kpi">
+        <small>Single Clock Tick @ 5.70 GHz</small>
+        <b>0.175 ns</b>
+        <span>Light travels only 5.2 cm during one cycle</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="xdoc__layout">
+
+    <aside class="xdoc__aside" aria-label="Engineering Guide Contents">
+      <div class="xdoc__aside-head">Contents <span>TOC</span></div>
+      <ul class="xdoc__toc" data-xdoc-toc>
+        <li><a href="#cpu-en-1" class="is-active"><i>01</i><span>Foveros 3D Chiplets</span></a></li>
+        <li><a href="#cpu-en-2"><i>02</i><span>System Orchestration</span></a></li>
+        <li><a href="#cpu-en-3"><i>03</i><span>Binary Logic (ALU)</span></a></li>
+        <li><a href="#cpu-en-4"><i>04</i><span>3nm GAA &amp; Tunneling</span></a></li>
+        <li><a href="#cpu-en-5"><i>05</i><span>CMOS Heat &amp; FLIR PDE</span></a></li>
+        <li><a href="#cpu-en-6"><i>06</i><span>Real vs. Simplified</span></a></li>
+        <li><a href="#cpu-en-7"><i>07</i><span>5 Experiments to Try</span></a></li>
+        <li><a href="#cpu-en-ref"><i>08</i><span>References</span></a></li>
+      </ul>
+      <a class="xdoc__back" href="#stage">↑ Back to 3D Silicon Lab</a>
+    </aside>
+
+    <div class="xdoc__body">
+
+      <article class="xdoc__sec" id="cpu-en-1">
+        <span class="xdoc__sec-kicker">CHAPTER 01 · 45 mm SCALE</span>
+        <h2>Why a Modern Ultra 9 Is No Longer a Single Monolithic Die</h2>
+        <p>Lift the brushed nickel-copper Integrated Heat Spreader (<code>IHS</code>) in Scale 01 and you will not find one giant piece of silicon. Modern flagship CPUs are <strong>3D cities of four disaggregated chiplets</strong> bonded onto a shared silicon interposer (<strong>Foveros 3D Base Tile</strong>).</p>
+        <p>Extreme Ultraviolet (<code>EUV</code>) lithography at 3nm is extraordinarily expensive, and defect density grows exponentially with die area. Analog circuits like <code>PCIe 5.0</code> and <code>USB4</code> also scale poorly at 3nm. Disaggregation solves both: only the <strong>Compute Tile</strong> pays for leading-edge 3nm GAA wafers, while the <strong>Xe GPU</strong>, <strong>SoC + NPU</strong>, and <strong>I/O</strong> tiles use optimal process nodes stitched together by thousands of vertical copper Through-Silicon Vias (<code>TSV</code>).</p>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-2">
+        <span class="xdoc__sec-kicker">CHAPTER 02 · 2 mm SCALE</span>
+        <h2>How One Chip Orchestrates DDR5 RAM, PCIe 5.0 GPU &amp; NVMe Simultaneously</h2>
+        <p>Up to <strong>5.7 billion times every second</strong>, each core advances binary machine instructions through a superscalar pipeline (<strong>Fetch → Decode → Execute → Memory → Writeback</strong>), predicting conditional branches at &gt;99% accuracy while dispatching DMA transfers across DDR5 and PCIe 5.0.</p>
+        <div class="xdoc__callout">
+          <span class="xdoc__callout-label">Human-Scale Latency Analogy at 5.70 GHz</span>
+          <p>If one CPU clock tick (<strong>0.175 ns</strong>) felt like <strong>1 second</strong>, an L1 cache hit takes <strong>6 seconds</strong>, fetching from DDR5 RAM takes <strong>6.5 minutes</strong>, and reading from the fastest NVMe SSD takes <strong>several days</strong>. Out-of-order execution and smart prefetching exist solely so cores never sit idle waiting on memory.</p>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-3">
+        <span class="xdoc__sec-kicker">CHAPTER 03 · 100 nm SCALE</span>
+        <h2>No Mathematician Inside: Pure Voltage Logic in Silicon</h2>
+        <p>Inside the ALU there are no decimal numbers — only copper interconnects toggling between <strong>0 V (logic 0)</strong> and <strong>0.85 V (logic 1)</strong>. Scale 03 renders a live <strong>4-bit Ripple-Carry Full Adder</strong> built strictly from <code>XOR</code>, <code>AND</code>, and <code>OR</code> gates. Toggle inputs <strong>A</strong> and <strong>B</strong> to watch carry bits ripple across silicon in picoseconds. Multiplication, 4K shaders, cryptography, and frontier AI matrix math are billions of these exact primitives firing in parallel.</p>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-4">
+        <span class="xdoc__sec-kicker">CHAPTER 04 · 3 nm SCALE</span>
+        <h2>15 Atoms Wide: Gate-All-Around (GAA) &amp; Quantum Tunneling</h2>
+        <p>Below 5nm, traditional 3-sided <code>FinFET</code> gates could no longer pinch off current leaking underneath the fin. Modern <strong>3nm GAA / RibbonFET</strong> transistors replace vertical fins with <strong>three stacked horizontal silicon nanosheets</strong> wrapped 360° by metal gates and a ~1–2 nm <code>HfO₂</code> dielectric.</p>
+        <div class="xdoc__callout">
+          <span class="xdoc__callout-label">Quantum Tunneling When Switched OFF (0.10 V)</span>
+          <p>Drop gate voltage to <strong>0.10 V</strong> in Scale 04: the potential barrier rises and main conduction stops, yet individual red electrons still slip straight through. At ~15 atoms thickness, electron wavefunctions penetrate the barrier — creating <strong>static leakage current</strong> that consumes power and produces heat even while idle.</p>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-5">
+        <span class="xdoc__sec-kicker">CHAPTER 05 · FLIR THERMAL PDE</span>
+        <h2>Why CPUs Get Hot — And Why Voltage Squared (V²) Kills Thermals</h2>
+        <p>Under heavy load, a processor concentrates <strong>200+ W</strong> into an area smaller than a postage stamp. Scale 05 runs a live <strong>48×48 2D Heat PDE solver</strong> mapped to an authentic Ironbow FLIR palette, driven by the fundamental CMOS power equation:</p>
+        <div class="xdoc__formula">
+          <span class="xdoc__formula-eq">P<sub>total</sub> = α · C<sub>eff</sub> · V² · f &nbsp;+&nbsp; I<sub>leak</sub>(T) · V</span>
+          <small>Dynamic switching power scales linearly with frequency (<code>f</code>) and quadratically with voltage (<code>V²</code>), while subthreshold quantum leakage grows exponentially with silicon temperature (<code>T</code>).</small>
+        </div>
+        <div class="xdoc__grid2">
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">Joule Heating &amp; Phonons</span>
+            <h3>Electron-Lattice Collisions</h3>
+            <p>Every clock edge charges and discharges billions of gate capacitors. Accelerated electrons collide with silicon crystal atoms, exciting lattice vibrations (<strong>phonons</strong>) — which we feel macroscopically as heat.</p>
+          </div>
+          <div class="xdoc__card xdoc__card--warn">
+            <span class="xdoc__card-tag">V² Explosion &amp; 100°C PROCHOT</span>
+            <h3>Automatic Thermal Throttling</h3>
+            <p>Raising voltage by just 28% (<code>1.05 V → 1.35 V</code>) increases dynamic power by <strong>65%</strong>. The moment peak junction temperature hits <strong>100°C</strong>, hardware <code>PROCHOT</code> pulls clocks and voltage down within milliseconds to protect the silicon.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-6">
+        <span class="xdoc__sec-kicker">CHAPTER 06 · SCIENTIFIC HONESTY</span>
+        <h2>What Is Computed Real-Time vs. Visually Simplified</h2>
+        <div class="xdoc__grid2">
+          <div class="xdoc__card xdoc__card--ok">
+            <span class="xdoc__card-tag">Computed Live in JavaScript</span>
+            <h3>100% Real Physics &amp; Math</h3>
+            <p>Exact 4-bit Full-Adder Boolean propagation (<code>XOR/AND/OR</code> + ripple carry), CMOS <code>α·C·V²·f</code> dynamic power, exponential temperature-coupled leakage, finite-difference <code>48×48</code> 2D Heat PDE with Ironbow FLIR colormap, and automatic 100°C <code>PROCHOT</code> throttling — plus 100% procedural Canvas textures with zero external <code>.glb</code> assets.</p>
+          </div>
+          <div class="xdoc__card">
+            <span class="xdoc__card-tag">Visual Clarity Abstractions</span>
+            <h3>Pedagogical Simplifications</h3>
+            <p>Real 3nm dies pack 15–18 BEOL copper metal layers and 200+ micro-op reorder buffers per core. In Scale 04, tunneling electrons are visualized as discrete classical particles with probabilistic barrier penetration rather than full Schrödinger wavepackets.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-7">
+        <span class="xdoc__sec-kicker">CHAPTER 07 · HANDS-ON EXPERIMENTS</span>
+        <h2>5 Interactive Experiments to Try Right Now</h2>
+        <ul class="xdoc__obs">
+          <li><i>01</i><span>In <b>Scale 01 (45mm)</b>, slide Explode to <b>100%</b> or toggle <code>X-Ray IHS</code>, then click each of the <b>4 silicon chiplets</b> to inspect transistor counts, process nodes, and cache topology.</span></li>
+          <li><i>02</i><span>In <b>Scale 02 (2mm)</b>, pick <b>AI Matrix Inference</b> and press <code>S</code> (<b>+1 Clock Step</b>) to freeze time and follow binary opcodes flowing from NVMe to DDR5 and L1 cache.</span></li>
+          <li><i>03</i><span>In <b>Scale 03 (100nm)</b>, set Input A = <b>15</b> (<code>1111</code>) and Input B = <b>1</b> (<code>0001</code>) to watch the carry-out domino race across all 4 bits into overflow <code>10000</code> (16).</span></li>
+          <li><i>04</i><span>In <b>Scale 04 (3nm)</b>, click <b>OFF 0.10 V</b> to witness red quantum-tunneling leakage electrons slipping through the barrier, then jump to <b>0.85 V</b> to observe Joule lattice vibration.</span></li>
+          <li><i>05</i><span>In <b>Scale 05 (FLIR)</b>, select <b>24-Core Heavy Render</b> and switch to <b>No Cooler</b> (or push voltage to <code>1.42 V</code>) to watch the 8 P-Cores glow white-hot and trigger <code>PROCHOT</code> at 100°C.</span></li>
+        </ul>
+      </article>
+
+      <article class="xdoc__sec" id="cpu-en-ref">
+        <span class="xdoc__sec-kicker">CHAPTER 08 · REFERENCES</span>
+        <h2>Engineering &amp; Academic References</h2>
+        <ul class="xdoc__refs">
+          <li><i>[1]</i><span>Hennessy, J. L. &amp; Patterson, D. A. — <em>Computer Architecture: A Quantitative Approach</em> (6th ed.) — Instruction pipelining, memory hierarchy, and superscalar execution.</span></li>
+          <li><i>[2]</i><span>Dennard, R. H. et al. — <em>Design of Ion-Implanted MOSFET's with Very Small Physical Dimensions</em>, IEEE JSSC, 1974 — Dennard scaling and power density limits.</span></li>
+          <li><i>[3]</i><span>Rabaey, J. M., Chandrakasan, A., Nikolić, B. — <em>Digital Integrated Circuits</em> — CMOS dynamic power (<code>α·C·V²·f</code>) and subthreshold leakage physics.</span></li>
+          <li><i>[4]</i><span>Landauer, R. — <em>Irreversibility and Heat Generation in the Computing Process</em>, IBM Journal of R&amp;D, 1961 — Thermodynamic lower bound of bit erasure.</span></li>
+          <li><i>[5]</i><span>IEEE IEDM &amp; ISSCC Proceedings — 3nm Gate-All-Around (GAA / RibbonFET) nanosheet transistors and Foveros 3D disaggregated chiplet packaging.</span></li>
+        </ul>
+      </article>
+
+      <div class="xdoc__bridge">
+        <div class="xdoc__bridge-copy">
+          <h3>Open-Source Lab #07 — Built Solo by Mohammad Navidi (Navidix Studio)</h3>
+          <p>This standalone vanilla Three.js lab is part of <strong>Navidix Studio</strong> — a solo-built multimodal AI operating system unifying <strong>470+ frontier models</strong> (Claude Fable 5.2, GPT-6.2 Astra, Gemini 4 Neon, Flux 3, Omni 1.2) across 9 workbenches and 7 interactive 3D science labs.</p>
+        </div>
+        <a class="xbtn xbtn--go" href="https://github.com/NavidixStudio/inside-a-3nm-cpu" target="_blank" rel="noopener">
+          <span>View Source on GitHub (MIT)</span>
+          <svg class="xbtn__ind" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14M12 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+</div>
+
+<nav class="xwrap" aria-label="More Interactive Labs">
   <div class="xnext">
-    <a href="https://navidixstudio.com/explore/geometry-of-meaning/"><small>تجربه‌ی ۰۶</small><b>هندسه‌ی معنا — ماشین چطور بدون «فهمیدن» می‌فهمد؟</b></a>
-    <a href="https://navidixstudio.com/explore/hidden-network/"><small>تجربه‌ی ۰۵</small><b>شبکه‌ی پنهان — چرا اینترنت مقاوم و شکننده است</b></a>
+    <a href="https://navidixstudio.com/explore/geometry-of-meaning/"><small data-i18n="next.1.k">تجربه‌ی ۰۶</small><b data-i18n="next.1.t">هندسه‌ی معنا — ماشین چطور بدون «فهمیدن» می‌فهمد؟</b></a>
+    <a href="https://navidixstudio.com/explore/hidden-network/"><small data-i18n="next.2.k">تجربه‌ی ۰۵</small><b data-i18n="next.2.t">شبکه‌ی پنهان — چرا اینترنت مقاوم و شکننده است</b></a>
   </div>
 </nav>
 
 </main>
 
 <footer class="xfoot">
-  <p><span aria-hidden="true">©</span> ۱۴۰۵ <b>استودیو نویدیکس</b> — ساخته‌ی <a href="https://navidixstudio.com/about.html"><b>محمد نویدی</b></a>. تمام حقوق محفوظ است.<br />بازنشر با ذکر منبع آزاد است، فروشش نه.</p>
+  <p data-i18n-html="foot.copy"><span aria-hidden="true">©</span> ۱۴۰۵ <b>استودیو نویدیکس</b> — ساخته‌ی <a href="https://navidixstudio.com/about.html"><b>محمد نویدی</b></a>. تمام حقوق محفوظ است.<br />بازنشر با ذکر منبع آزاد است، فروشش نه.</p>
 </footer>
 
 <script src="./sim/inside-a-cpu.js"></script>
@@ -667,21 +845,24 @@
 (function () {
   function init() {
     if (window.NVXCPULab) window.NVXCPULab.mount('#stage');
-    var toc = document.querySelectorAll('[data-xdoc-toc] a');
-    if (toc.length && 'IntersectionObserver' in window) {
-      var byId = {};
-      toc.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (en) {
-          if (en.isIntersecting && byId[en.target.id]) {
-            toc.forEach(function (a) { a.classList.remove('is-active'); });
-            byId[en.target.id].classList.add('is-active');
-          }
+    if ('IntersectionObserver' in window) {
+      document.querySelectorAll('[data-xdoc-toc]').forEach(function (tocEl) {
+        var links = tocEl.querySelectorAll('a');
+        if (!links.length) return;
+        var byId = {};
+        links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (en) {
+            if (en.isIntersecting && byId[en.target.id]) {
+              links.forEach(function (a) { a.classList.remove('is-active'); });
+              byId[en.target.id].classList.add('is-active');
+            }
+          });
+        }, { rootMargin: '-20% 0px -65% 0px' });
+        Object.keys(byId).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) io.observe(el);
         });
-      }, { rootMargin: '-20% 0px -65% 0px' });
-      Object.keys(byId).forEach(function (id) {
-        var el = document.getElementById(id);
-        if (el) io.observe(el);
       });
     }
   }
