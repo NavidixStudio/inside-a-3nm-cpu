@@ -4,9 +4,10 @@
 
 **Zoom 15,000,000× inside a flagship 3nm CPU — from an explodable Foveros 3D package down to a 4-bit silicon adder, a 3nm GAA nanosheet transistor with quantum tunneling, and a real-time 48×48 2D Heat PDE FLIR thermal camera.**
 
-[![Live Demo (EN)](https://img.shields.io/badge/Live_Interactive_Demo-navidixstudio.com-E31B23?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)
-[![Zero Build](https://img.shields.io/badge/Zero_Build-Vanilla_JS_%2B_Three.js-D8A458?style=for-the-badge)](#run-locally-in-10-seconds)
+[![Live Demo (EN)](https://img.shields.io/badge/Live_Demo_(EN)-navidixstudio.com-E31B23?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Instant_Demo-D8A458?style=for-the-badge)](https://navidixstudio.github.io/inside-a-3nm-cpu/)
 [![Bilingual](https://img.shields.io/badge/UI-English_%2F_Persian_(1--Click)-67E8F9?style=for-the-badge)](https://navidixstudio.com/explore/inside-a-cpu/?lang=en)
+[![Zero Build](https://img.shields.io/badge/Zero_Build-Vanilla_JS_%2B_Three.js-8FDBFF?style=for-the-badge)](#run-locally-in-10-seconds)
 [![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](./LICENSE)
 
 *Part of [**Navidix Interactive Science Platform**](https://navidixstudio.com/explore/) · Built solo by [**Mohammad Navidi**](https://github.com/NavidixStudio).*
